@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 24, 2025 at 11:31 AM
+-- Generation Time: Oct 31, 2025 at 11:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -121,16 +121,17 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`question_id`, `title`, `content`, `image`, `view_count`, `status`, `created_at`, `user_id`, `module_id`, `updated_at`) VALUES
-(1, 'How to center a div?', 'I have tried margin: auto but it\'s not working. What is the modern way using flexbox?', 'center_div.png', 150, 'active', '2025-08-05 02:15:00', 2, 1, '2025-08-05 02:15:00'),
-(2, 'What is a foreign key?', 'I don\'t understand the difference between a primary key and a foreign key. Can someone explain?', NULL, 302, 'closed', '2025-08-10 04:00:00', 3, 4, '2025-08-11 07:30:00'),
-(3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.', 'pdo_error.png', 75, 'active', '2025-08-20 07:30:00', 4, 1, '2025-08-20 07:30:00'),
-(4, 'What is Agile?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', NULL, 45, 'active', '2025-09-01 09:00:00', 2, 2, '2025-09-01 09:00:00'),
-(5, 'Difference between INNER JOIN and LEFT JOIN', 'My query is returning NULLs when I use LEFT JOIN but not INNER JOIN. Why?', NULL, 112, 'active', '2025-09-05 03:20:00', 7, 3, '2025-09-05 03:20:00'),
-(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', NULL, 500, 'active', '2025-09-10 02:00:00', 1, 2, '2025-09-10 02:00:00'),
-(7, 'How to use $_SESSION variable?', 'I set a session variable on login.php but when I go to dashboard.php it is empty. I forgot to use session_start().', NULL, 850, 'closed', '2025-09-12 06:00:00', 8, 1, '2025-09-13 03:15:00'),
-(8, 'What is a Class Diagram?', 'How is an ERD different from a Class Diagram? They look similar.', NULL, 25, 'active', '2025-10-01 04:30:00', 9, 2, '2025-10-01 04:30:00'),
-(9, 'What does NULL mean?', 'Is NULL the same as 0 or an empty string? My WHERE clause is not working.', NULL, 12, 'active', '2025-10-15 08:00:00', 10, 4, '2025-10-15 08:00:00'),
-(10, 'How to hack wifi?', 'Just asking for a friend for a class project.', 'bad_post.png', 2, 'removed_by_admin', '2025-10-20 03:00:00', 4, 1, '2025-10-20 03:05:00');
+(1, 'How to center a div?', 'I have tried margin: auto but it\'s not working. What is the modern way using flexbox?', 'img1.jpg', 150, 'active', '2025-08-05 02:15:00', 2, 1, '2025-10-31 07:08:15'),
+(2, 'What is a foreign key?', 'I don\'t understand the difference between a primary key and a foreign key. Can someone explain?', 'img2.jpg', 302, 'closed', '2025-08-10 04:00:00', 3, 4, '2025-10-31 07:08:19'),
+(3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.', 'img3.jpg', 75, 'active', '2025-08-20 07:30:00', 4, 1, '2025-10-31 07:08:23'),
+(4, 'What is Agile?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', 'img4.jpg', 45, 'active', '2025-09-01 09:00:00', 2, 2, '2025-10-31 07:08:27'),
+(5, 'Machine Learning Overfitting', 'My ML model is doing exceptionally well during training but it drops hard during test. How can I fix this?', 'img5.jpg', 112, 'active', '2025-09-05 03:20:00', 7, 3, '2025-10-31 07:22:36'),
+(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 500, 'active', '2025-09-10 02:00:00', 1, 2, '2025-10-31 07:08:33'),
+(7, 'How to use $_SESSION variable?', 'I set a session variable on login.php but when I go to dashboard.php it is empty. I forgot to use session_start().', 'img7.jpg', 850, 'closed', '2025-09-12 06:00:00', 8, 1, '2025-10-31 07:08:37'),
+(8, 'What is a Class Diagram?', 'How is an ERD different from a Class Diagram? They look similar.', 'img8.jpg', 25, 'active', '2025-10-01 04:30:00', 9, 2, '2025-10-31 07:08:42'),
+(9, 'What does NULL mean?', 'Is NULL the same as 0 or an empty string? My WHERE clause is not working.', 'img9.jpg', 12, 'active', '2025-10-15 08:00:00', 10, 4, '2025-10-31 07:08:45'),
+(10, 'How to hack wifi?', 'Just asking for a friend for a class project.', 'img10.jpg', 2, 'removed_by_admin', '2025-10-20 03:00:00', 4, 1, '2025-10-31 07:08:50'),
+(13, 'Which language?', 'Should I study R or Python for DS?', 'img11.jpg', 0, 'active', '2025-10-31 09:01:53', 8, 4, '2025-10-31 09:01:53');
 
 -- --------------------------------------------------------
 
@@ -376,13 +377,13 @@ ALTER TABLE `module`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tag`
@@ -394,7 +395,7 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables

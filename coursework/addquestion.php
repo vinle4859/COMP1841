@@ -9,8 +9,8 @@ if (isset($_POST['content'])) {
         $stmt->bindValue(':content', $_POST['content']);
         $stmt->bindValue(':image', strtolower($_POST['image']) . ".jpg");
         $stmt->bindValue(':title', $_POST['title']);
-        $stmt->bindValue(':module_id', $_POST['module_id']);
-        $stmt->bindValue(':user_id', $_POST['user_id']);
+        $stmt->bindValue(':module_id', $_POST['module']);
+        $stmt->bindValue(':user_id', $_POST['user']);
         $stmt->execute();   
         header('location: questions.php');
     } catch (PDOException $e) {
@@ -18,7 +18,12 @@ if (isset($_POST['content'])) {
     $output = 'Database error: ' . $e->getMessage();
     }
 } else {
+    include 'includes/DatabaseConnection.php';
     $title = 'Add new question';
+    $sql_users = 'SELECT * FROM user_account';
+    $sql_modules = 'SELECT * FROM module';
+    $users = $pdo->query($sql_users);
+    $modules = $pdo->query($sql_modules);
     ob_start();
     include 'templates/addquestion.html.php';
     $output = ob_get_clean();
