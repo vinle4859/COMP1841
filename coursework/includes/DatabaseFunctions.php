@@ -5,3 +5,11 @@ function getTotalQuestions($pdo) {
     $row = $query->fetch();
     return $row[0];
 }
+
+function getTotalAnswers($pdo, $questionId) {
+    $query = $pdo->prepare(
+        "SELECT COUNT(*) FROM answer WHERE question_id = $questionId");
+    $query->execute();
+    $row = $query->fetch();
+    return $row[0];
+}
