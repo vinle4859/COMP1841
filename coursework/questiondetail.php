@@ -23,11 +23,22 @@
         $stmt->bindValue(':id', $_GET['id']);
         $stmt->execute();
         $answers = $stmt->fetchAll();
+
+        // Render the detail template into $output so layout can place it in the page
+        // Set a sensible page title first (explicit if/else for clarity)
+        if (isset($question['title']) && $question['title'] !== '') {
+            $title = $question['title'];
+        } else {
+            $title = 'Question detail';
+        }
+        ob_start();
+        include 'templates/questiondetail.html.php';
+        $output = ob_get_clean();
     } catch (PDOException $e) {
         $title = 'An error has occured';
         $output = 'Database error: ' . $e->getMessage();
         $question = null;
         $answers = [];
     }
-    include 'templates/questiondetail.html.php';
+    include 'templates/layout.html.php';
 ?>

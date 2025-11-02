@@ -28,6 +28,33 @@ blockquote {display: table; margin-bottom: 1em; border-bottom: 1px solid #ccc; p
 blockquote p {display: table-cell; width: 70%; vertical-align: top;}
 blockquote form {  display: table-cell; width: 10%;}
 
+/* framed style for answers to increase clarity */
+.answer {
+	/* simple framed answers with left/right borders only */
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	border-left: 2px solid #000;
+	border-right: 2px solid #000;
+	padding: 1em 1.25em;
+	margin: 1.25em 0;
+	background-color: #ffffff;
+	border-radius: 4px;
+}
+.answer p {display: block; margin: 0 0 0.6em 0;}
+.answer img {max-height: 140px; display: block; margin-top: 0.5em; max-width: 100%; height: auto;}
+
+/* fallback for blockquote.answer if answers still render as blockquote */
+/* removed blockquote.answer fallback - answers use .answer (div) now */
+
+/* Styles specific to the single-question detail view */
+.question-detail {display: block; padding: 1em 0 0.5em 0; margin-bottom: 1em;}
+.question-detail:after {content: ""; display: table; clear: both;}  
+.question-detail img {float: left; margin: 0.25em 0 0.25em 0; max-height: 150px; width: auto;}
+.question-detail h3 {display: block; margin: 0 0 0.25em 0; font-weight: normal;}
+.question-detail h2 {display: block; margin: 0.5em 0 0.5em 0; font-weight: bold;}
+.question-detail p {clear: none;}
+
 .errors {padding: 1em; border: 1px solid red; background-color: lightyellow; color: red; margin-bottom: 1em; overflow: auto;}
 .errors ul {margin-left: 1em;}
 
@@ -40,6 +67,9 @@ input[type="checkbox"] + label {clear: right;}
 .categories a {color: white; text-decoration: none;}
 .categories li {margin-bottom: 1em;}
 .questionlist .questions {display: table-cell; padding: 1em;}
+
+/* Ensure blockquotes inside the questions column render as block-level cards */
+.questionlist .questions blockquote {display: block; border-bottom: none; padding: 0.75em;}
 
 .currentpage:before { content: "["; }
 .currentpage:after { content: "]"; }

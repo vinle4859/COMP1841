@@ -7,8 +7,10 @@ function getTotalQuestions($pdo) {
 }
 
 function getTotalAnswers($pdo, $questionId) {
-    $query = $pdo->prepare(
-        "SELECT COUNT(*) FROM answer WHERE question_id = $questionId");
+    // Use a parameterized query to avoid SQL injection
+    $query = $pdo->prepare('SELECT COUNT(*) FROM answer 
+    WHERE question_id = :questionId');
+    $query->bindValue(':questionId', $questionId);
     $query->execute();
     $row = $query->fetch();
     return $row[0];

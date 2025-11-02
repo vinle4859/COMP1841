@@ -1,11 +1,12 @@
-<form action="", method="post">
+<form action="" method="post" class="needs-validation" novalidate>
     <label for="title">Write Your Title:</label>
-    <textarea rows="3" cols="30" name="title"></textarea>
+    <input type="text" id="title" name="title" required maxlength="255">
 
     <label for="content">Write Your question:</label>
-    <textarea rows="3" cols="40" name="content"></textarea>
+    <textarea id="content" name="content" rows="5" cols="60" required></textarea>
     
-    <select name="module">
+    <label for="module">Module</label>
+    <select id="module" name="module" required>
         <option value="">Select a module</option>
         <?php foreach($modules as $module): ?>
             <option value="<?=htmlspecialchars($module['module_id'], ENT_QUOTES, 'UTF-8')?>">
@@ -13,7 +14,8 @@
         <?php endforeach; ?>
     </select>
 
-    <select name="user">
+    <label for="user">Author</label>
+    <select id="user" name="user" required>
         <option value="">Select a user</option>
         <?php foreach($users as $user): ?>
             <option value="<?=htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8')?>">
@@ -21,8 +23,8 @@
         <?php endforeach; ?>
     </select>
     
-    <label for="image">Input Your Image:</label>
-    <textarea rows="3" cols="20" name="image"></textarea>
+    <label for="image">Image (placeholder)</label>
+    <input type="text" id="image" name="image" placeholder="image-filename.jpg (optional)">
 
     <input type="submit" name="Submit" value="Add">
 </form>

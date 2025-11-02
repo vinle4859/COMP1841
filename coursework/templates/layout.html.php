@@ -21,5 +21,29 @@
         <footer>
             &copy; IJDB2023
         </footer>
+        
+        <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            // Confirm deletes for forms with class 'confirm-delete'
+            document.querySelectorAll('form.confirm-delete').forEach(function(form){
+                form.addEventListener('submit', function(e){
+                    if (!confirm('Are you sure you want to delete this item?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            // Simple HTML5-driven client-side validation for forms with .needs-validation
+            document.querySelectorAll('form.needs-validation').forEach(function(form){
+                form.addEventListener('submit', function(e){
+                    if (!form.checkValidity()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Please complete the required fields before submitting the form.');
+                    }
+                });
+            });
+        });
+        </script>
     </body>
 </html>

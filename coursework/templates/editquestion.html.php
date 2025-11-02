@@ -1,15 +1,13 @@
-<form action="" method="post">
-    <input type="hidden" name="question_id" value="<?=$question['question_id']?>">
+<form action="" method="post" class="needs-validation" novalidate>
+    <input type="hidden" name="question_id" value="<?=htmlspecialchars($question['question_id'], ENT_QUOTES, 'UTF-8')?>">
     <!-- Edit Title -->
     <label for="title">Edit your question title here:</label>
-    <textarea name = "title" rows="5" cols="40">
-    <?=$question['title']?>
-    </textarea>
+    <input type="text" id="title" name="title" value="<?=htmlspecialchars($question['title'], ENT_QUOTES, 'UTF-8')?>" required maxlength="255">
 
     <!-- Edit Content -->
     <label for="content">Edit your question here:</label>
-    <textarea name = "content" rows="5" cols="80">
-    <?=$question['content']?>
-    </textarea>
+    <textarea id="content" name="content" rows="5" cols="80" required><?=htmlspecialchars($question['content'], ENT_QUOTES, 'UTF-8')?></textarea>
     <input type="submit" name="submit" value="Save">
-    
+</form>
+    </textarea>
+
