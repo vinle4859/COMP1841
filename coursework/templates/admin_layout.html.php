@@ -4,16 +4,20 @@
         <title><?=$title?></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="questions.css" rel="stylesheet">
+        <link href="../questions.css" rel="stylesheet">
     </head>
     <body>
-        <header><h1>Internet question Database</h1></header>
+        <header id="admin">
+            <h1>University of Greenwich Student Forum - Admin Area</h1>
+        </header>
         <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
+                <!-- <li><a href="index.php">Home</a></li> -->
                 <li><a href="questions.php">Question List</a></li>
-                <!-- <li><a href="addquestion.php">Add a new question</a></li> -->
-                <li><a href="admin/questions.php">Admin</a></li>
+                <li><a href="addquestion.php">Add a new question</a></li>
+                <!-- <li><a href="admin/questions.php">Admin</a></li> -->
+                <li><a href="../index.php">Public Site</a></li>
+                
             </ul>
         </nav>
         <main>

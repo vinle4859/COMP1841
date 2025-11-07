@@ -1,7 +1,7 @@
 <?php
 try {
-    include 'includes/DatabaseConnection.php';
-    include 'includes/DatabaseFunctions.php';
+    include '../includes/DatabaseConnection.php';
+    include '../includes/DatabaseFunctions.php';
     // $sql = 'DELETE FROM question WHERE question_id = :id';
     // $stmt = $pdo->prepare($sql);
     // $stmt->bindValue(':id', $_POST['question_id']);
@@ -13,5 +13,5 @@ try {
     $output = 'Unable to establish Database Connection to delete question: '
      . $e->getMessage();
 }
-include 'templates/layout.html.php'
+include '../templates/admin_layout.html.php'
 ?>

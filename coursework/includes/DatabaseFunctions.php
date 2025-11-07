@@ -30,19 +30,37 @@ function getTotalAnswers($pdo, $question_id) {
     return $row[0];
 }
 
-function getQuestion($pdo, $questionId) {
+function getQuestion($pdo, $question_id) {
     $sql = 'SELECT * FROM question WHERE question_id = :id';
-    $parameters = [':id' => $questionId];
+    $parameters = [':id' => $question_id];
     $query = query($pdo, $sql, $parameters);
     $question = $query->fetch();
     return $question;
 }
 
-function updateQuestion($pdo, $question_id, $content, $title) {
-    $sql = 'UPDATE question SET content = :content, title = :title 
+function getModule($pdo, $module_id) {
+    $sql = 'SELECT * FROM module WHERE module_id = :id';
+    $parameters = [':id' => $module_id];
+    $query = query($pdo, $sql, $parameters);
+    $module = $query->fetch();
+    return $module;
+}
+
+function getUser($pdo, $user_id) {
+    $sql = 'SELECT * FROM user_account WHERE user_id = :id';
+    $parameters = [':id' => $user_id];
+    $query = query($pdo, $sql, $parameters);
+    $user = $query->fetch();
+    return $user;
+}
+
+function updateQuestion($pdo, $question_id, $content, $title, $image, $user_id, $module_id) {
+    $sql = 'UPDATE question SET content = :content, title = :title, image = :image, 
+    user_id = :user_id, module_id = :module_id 
     WHERE question_id = :id';
     $parameters = [':id' => $question_id, ':content' => $content, 
-    ':title' => $title];
+    ':title' => $title, ':image' => $image, ':user_id' => $user_id, 
+    ':module_id' => $module_id];
     query($pdo, $sql, $parameters);
 }
 
@@ -64,7 +82,7 @@ function selectAll($pdo, $table) {
     $tables = ['user_account', 'module'];
 
     // Check if the requested table is in the safe list
-    if (!in_array($table, $allowedTables)) {
+    if (!in_array($table, $tables)) {
         throw new \Exception("Invalid table name.");
     }
     $sql = "SELECT * FROM $table";

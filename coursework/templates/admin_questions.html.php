@@ -13,15 +13,15 @@
         <?=htmlspecialchars($question['username'], ENT_QUOTES, 'UTF-8');?>
         </a>)
         <!-- Edit button -->
-        <!-- <a href="editquestion.php?id=<?=$question['question_id']?>">Edit</a> -->
-        <!-- <br> -->
+        <a href="editquestion.php?id=<?=$question['question_id']?>">Edit</a>
+        <br>
         <!-- Image Display -->
-        <img height='100px' src="images/<?=htmlspecialchars($question['image'], 
+        <img height='100px' src="../images/<?=htmlspecialchars($question['image'], 
         ENT_QUOTES, 'UTF-8'); ?>" >
-        <!-- Delete Button
+        <!-- Delete Button -->
                 <form action="deletequestion.php" method="post" class="confirm-delete">
             <input type="hidden" name="question_id" value="<?=$question['question_id']?>">
-            <input type="submit" value="DELETE"> -->
+            <input type="submit" value="DELETE">
         </form>
             </blockquote>
         <?php endforeach;?>
