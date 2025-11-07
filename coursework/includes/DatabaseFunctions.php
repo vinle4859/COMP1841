@@ -61,6 +61,12 @@ function addQuestion($pdo, $content, $image, $title, $user_id, $module_id) {
 }
 
 function selectAll($pdo, $table) {
+    $tables = ['user_account', 'module'];
+
+    // Check if the requested table is in the safe list
+    if (!in_array($table, $allowedTables)) {
+        throw new \Exception("Invalid table name.");
+    }
     $sql = "SELECT * FROM $table";
     $data = query($pdo, $sql);
     return $data->fetchAll();
