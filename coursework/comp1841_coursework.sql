@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2025 at 06:32 AM
+-- Generation Time: Nov 11, 2025 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -99,7 +99,9 @@ CREATE TABLE `message` (
   `subject` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `status` varchar(50) NOT NULL DEFAULT 'new',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `sender_name` varchar(100) DEFAULT NULL,
+  `sender_email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -159,9 +161,9 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`question_id`, `title`, `content`, `image`, `view_count`, `status`, `created_at`, `user_id`, `module_id`, `updated_at`) VALUES
-(1, 'How to center a div?', 'I have tried margin: auto but it\'s not working. What is the modern way using flexbox?', 'img1.jpg', 150, 'active', '2025-08-04 02:15:00', 2, 1, '2025-11-01 05:24:03'),
+(1, 'How do I center a div?', 'I have tried margin: auto but it\'s not working. What is the modern way using flexbox?', 'img1.jpg', 150, 'active', '2025-08-04 02:15:00', 2, 1, '2025-11-07 07:24:07'),
 (2, 'What is a foreign key?', 'I don\'t understand the difference between a primary key and a foreign key. Can someone explain?', 'img2.jpg', 302, 'closed', '2025-08-09 04:00:00', 3, 4, '2025-11-01 05:24:08'),
-(3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.', 'img3.jpg', 75, 'active', '2025-08-19 07:30:00', 4, 1, '2025-11-01 05:24:12'),
+(3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.                ', 'img3.jpg', 75, 'active', '2025-08-19 07:30:00', 4, 1, '2025-11-07 11:06:36'),
 (4, 'What is Agile?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', 'img4.jpg', 45, 'active', '2025-08-31 09:00:00', 2, 2, '2025-11-01 05:24:17'),
 (5, 'Machine Learning Overfitting', 'My ML model is doing exceptionally well during training but it drops hard during test. How can I fix this?', 'img5.jpg', 112, 'active', '2025-09-04 03:20:00', 7, 3, '2025-11-01 05:24:20'),
 (6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 500, 'active', '2025-09-09 02:00:00', 6, 2, '2025-11-01 05:24:23'),
@@ -415,7 +417,7 @@ ALTER TABLE `module`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `role`

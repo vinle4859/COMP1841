@@ -13,7 +13,7 @@ if (isset($_POST['content'])) {
         // $stmt->bindValue(':module_id', $_POST['module']);
         // $stmt->bindValue(':user_id', $_POST['user']);
         // $stmt->execute();   
-        addQuestion($pdo, $_POST['content'], $_POST['image'] . ".jpg", 
+        addQuestion($pdo, $_POST['content'], $_POST['image'], 
         $_POST['title'], $_POST['user'], $_POST['module']);
         header('location: questions.php');
     } catch (PDOException $e) {

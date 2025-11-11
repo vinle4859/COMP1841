@@ -9,7 +9,8 @@
     <p><?=htmlspecialchars($question['content'], ENT_QUOTES, 'UTF-8')?></p>
     
     <?php if (!empty($question['image'])): ?>
-        <img height="150" src="../images/<?=htmlspecialchars($question['image'], ENT_QUOTES, 'UTF-8')?>" alt="Question image">
+        <img height="150" 
+        src="../images/<?=htmlspecialchars($question['image'], ENT_QUOTES, 'UTF-8')?>" alt="Question image">
     <?php endif; ?>
 </blockquote>
 

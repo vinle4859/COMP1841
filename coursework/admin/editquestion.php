@@ -11,7 +11,7 @@ try {
         // $stmt->execute();
         if(!empty($_POST['image'])) {
             updateQuestion($pdo, $_POST['question_id'], $_POST['content'], 
-            $_POST['title'], $_POST['image'] . ".jpg", $_POST['user'], 
+            $_POST['title'], $_POST['image'], $_POST['user'], 
             $_POST['module']);
         } else {
             $question = getQuestion($pdo, $_POST['question_id']);

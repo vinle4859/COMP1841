@@ -12,7 +12,8 @@
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="questions.php">Question List</a></li>
-                <!-- <li><a href="addquestion.php">Add a new question</a></li> -->
+                <li><a href="addquestion.php">Add a new question</a></li>
+                <li><a href="contact.php">Leave a message</a></li>
                 <li><a href="admin/questions.php">Admin</a></li>
             </ul>
         </nav>
