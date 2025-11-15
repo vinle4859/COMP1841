@@ -27,7 +27,7 @@
                 </td>
                 <td><?=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8')?></td>
                 <td><?=htmlspecialchars($message['status'], ENT_QUOTES, 'UTF-8')?></td>
-                <td><a href="admin_message.php?id=<?= $message['message_id'] ?>">View</a></td>
+                <td><a href="messagedetail.php?id=<?= $message['message_id'] ?>">View</a></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>

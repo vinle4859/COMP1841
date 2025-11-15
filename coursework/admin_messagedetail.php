@@ -1,26 +1,9 @@
 <?php
-include 'includes/DatabaseConnection.php';
-include 'includes/DatabaseFunctions.php';
-
+// Redirect to new admin messagedetail location
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($id <= 0) {
-    header('Location: admin_messages.php');
-    exit;
+if ($id > 0) {
+    header('Location: admin/messagedetail.php?id=' . $id);
+} else {
+    header('Location: admin/messages.php');
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
-    $newStatus = $_POST['status'];
-    setMessageStatus($pdo, $id, $newStatus);
-}
-
-$message = getMessageById($pdo, $id);
-if (!$message) {
-    header('Location: admin_messages.php');
-    exit;
-}
-
-$title = 'Message #' . $id;
-ob_start();
-include 'templates/admin_message.html.php';
-$output = ob_get_clean();
-include 'templates/layout.html.php';
+exit;

@@ -85,6 +85,36 @@ function deleteQuestion($pdo, $question_id) {
     query($pdo, $sql, $parameters);
 }
 
+function deleteUser($pdo, $user_id) {
+    // Dissociate questions from this user (keep the questions) then delete the user.
+    $sql = 'UPDATE question SET user_id = NULL WHERE user_id = :id';
+    query($pdo, $sql, [':id' => $user_id]);
+
+    $sql = 'DELETE FROM user_account WHERE user_id = :id';
+    query($pdo, $sql, [':id' => $user_id]);
+}
+
+function deleteModule($pdo, $module_id) {
+    // Dissociate questions from this module (keep the questions) then delete module.
+    $sql = 'UPDATE question SET module_id = NULL WHERE module_id = :id';
+    query($pdo, $sql, [':id' => $module_id]);
+
+    $sql = 'DELETE FROM module WHERE module_id = :id';
+    query($pdo, $sql, [':id' => $module_id]);
+}
+
+function updateUser($pdo, $user_id, $username, $email) {
+    $sql = 'UPDATE user_account SET username = :username, email = :email WHERE user_id = :id';
+    $params = [':username' => $username, ':email' => $email, ':id' => $user_id];
+    query($pdo, $sql, $params);
+}
+
+function updateModule($pdo, $module_id, $module_name) {
+    $sql = 'UPDATE module SET module_name = :module_name WHERE module_id = :id';
+    $params = [':module_name' => $module_name, ':id' => $module_id];
+    query($pdo, $sql, $params);
+}
+
 function addQuestion($pdo, $content, $image, $title, $user_id, $module_id) {
     $sql = 'INSERT INTO question SET content = :content, image = :image, 
     title = :title, user_id = :user_id, module_id = :module_id';
@@ -142,7 +172,7 @@ function getMessageList($pdo, $status = null) {
     return $query->fetchAll();
 }
 
-function getMessage($pdo, $message_id) {
+function getContactMessage($pdo, $message_id) {
     $message = getById($pdo, 'message', $message_id);
     return $message;
 }

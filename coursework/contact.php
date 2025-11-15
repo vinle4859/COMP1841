@@ -1,7 +1,9 @@
 <?php
 
-include 'includes/DataBaseFunctions.php';
+include 'includes/DatabaseFunctions.php';
 include 'includes/InputHelpers.php';
+// Initialize form variables to avoid undefined variable notices in the template
+$name = $email = $subject = $body = '';
 if (isset($_POST['submit'])) {
     try {
         include 'includes/DatabaseConnection.php';
@@ -13,12 +15,11 @@ if (isset($_POST['submit'])) {
         if ($name === '' || $email === '' || $subject === '' || $body === '') {
             $error = 'Please fill all required fields.';
         } else {
-            // no authentication yet; guest submission — store sender_name/sender_email
-            $user_id = null;
+            // no authentication, guest submission — store sender_name/sender_email
+            $user_id = null;    
             addMessage($pdo, $subject, $body, $name, $email, $user_id);
-            $success = 'Message sent! Thank you for contacting us.';
-            // clear form values
             $name = $email = $subject = $body = '';
+            $success = 'Your message has been sent successfully.';
         }
     } catch (PDOException $e) {
         $title = 'An error has occured';

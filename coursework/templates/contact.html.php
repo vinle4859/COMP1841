@@ -4,8 +4,11 @@
     <div class="errors"><?=htmlspecialchars($error, ENT_QUOTES, 'UTF-8')?></div>
 <?php endif; ?>
 <?php if (!empty($success)): ?>
+    <br>
     <div class="success"><?=htmlspecialchars($success, ENT_QUOTES, 'UTF-8')?></div>
 <?php endif; ?>
+
+<br>
 
 <form action="contact.php" method="post" class="needs-validation" novalidate>
     <label for="name">Name</label>
@@ -22,3 +25,5 @@
 
     <input type="submit" name="submit" value="Send">
 </form>
+
+<?php /* auto-hide script removed */ ?>

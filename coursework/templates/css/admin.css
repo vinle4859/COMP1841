@@ -1,0 +1,83 @@
+/* Admin area styles */
+
+/* Header */
+header#admin { 
+    background-color: #666fd2; 
+    color: #ffffff;
+    padding: 1rem;
+}
+
+/* Sidebar (strong selector to override global nav rules) */
+header#admin + .admin-container > nav {
+    flex: 0 0 240px;
+    width: 240px;
+    background-color: #565372;
+    min-height: 100vh;
+    display: block;
+    z-index: 10;
+}
+
+/* Layout Wrapper */
+.admin-container { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    align-items: flex-start; 
+    /* width: 100%;  */
+    max-width: 100%; 
+}
+
+/* Sidebar Navigation */
+/* Layout wrapper */
+.admin-container { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    align-items: flex-start; 
+    max-width: 100%; 
+}
+
+/* Nav list */
+.admin-container nav ul {
+    list-style: none;
+    padding: 1rem;
+    margin: 0;
+    display: block;
+    width: 100%;
+}
+
+.admin-container nav li {
+    margin: 0.5rem 0;
+    display: block;
+    text-align: left;
+    padding: 0;
+}
+
+/* Navigation Links */
+.admin-container nav a { 
+    text-decoration: none; 
+    /* [FIX] Changed color to Off-White for high contrast against dark purple */
+    color: #E2E8F0; 
+    font-weight: 700; 
+    font-size: 1.05rem; 
+    
+    /* [UX IMPROVEMENT] Make the link behave like a block button */
+    display: block; 
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.admin-container nav a:hover { 
+    /* [UX IMPROVEMENT] Visual feedback on hover */
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF; 
+}
+
+/* Main content */
+.admin-container > main { 
+    flex: 1 1 auto; 
+    background: #fff; 
+    padding: 2rem; 
+    box-sizing: border-box; 
+    margin: 0; 
+    max-width: none; 
+}

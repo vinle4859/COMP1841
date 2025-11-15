@@ -6,7 +6,7 @@
 <hr>
 <div style="white-space:pre-wrap;"><?=htmlspecialchars($message['content'] ?? '', ENT_QUOTES, 'UTF-8')?></div>
 <hr>
-<form action="admin_message.php?id=<?= (int)$message['message_id'] ?>" method="post">
+<form action="messagedetail.php?id=<?= (int)$message['message_id'] ?>" method="post">
     <label for="status">Status</label>
     <select id="status" name="status">
         <option value="new" <?=($message['status']==='new' ? 'selected' : '')?>>new</option>
