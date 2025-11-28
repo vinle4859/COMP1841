@@ -1,10 +1,10 @@
 <?php
-// Moved editmodule into admin/ and adjusted includes
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
-include '../includes/InputHelpers.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'ModuleDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
-// Unified flow: POST uses `module_id`, GET uses `id`. Single layout include at end.
 $error = null;
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,7 +23,6 @@ try {
         $module_name = trim($_POST['module_name'] ?? '');
         if ($module_name === '') {
             $error = 'Please enter a module name.';
-            // preserve submitted value
             $module['module_name'] = $module_name;
         } else {
             updateModule($pdo, $module_id, $module_name);
@@ -34,7 +33,7 @@ try {
 
     $title = 'Edit module';
     ob_start();
-    include '../templates/editmodule.html.php';
+    include ADMIN_TEMPLATES . 'editmodule.html.php';
     $output = ob_get_clean();
 
 } catch (PDOException $e) {
@@ -42,4 +41,4 @@ try {
     $output = 'Database error: ' . $e->getMessage();
 }
 
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';

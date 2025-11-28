@@ -7,7 +7,7 @@
     <link href="/COMP1841/coursework/templates/css/questions.css" rel="stylesheet">
     </head>
     <body>
-        <header><h1>University of Greenwich Student Forum</h1></header>
+        <header><h1>Student Forum</h1></header>
         <nav>
             <ul>
                 <li><a href="index.php" <?= (isset($activePage) && $activePage === 'home') ? 'class="active"' : '' ?>>Home</a></li>

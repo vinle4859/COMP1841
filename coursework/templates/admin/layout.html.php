@@ -9,7 +9,7 @@
     </head>
     <body>
         <header id="admin">
-            <h1>University of Greenwich Student Forum - Admin Area</h1>
+            <h1>Student Forum - Admin</h1>
         </header>
 
         <div class="admin-container">

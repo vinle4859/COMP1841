@@ -1,8 +1,9 @@
 <?php
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
-include '../includes/InputHelpers.php';
-
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'MessageDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
 $message_id = get_or_redirect('id', 'messages.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $message = getContactMessage($pdo, $message_id);
 $title = 'Message';
 ob_start();
-include '../templates/admin_messagedetail.html.php';
+include ADMIN_TEMPLATES . 'messagedetail.html.php';
 $output = ob_get_clean();
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';

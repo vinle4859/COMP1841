@@ -1,7 +1,9 @@
 <?php
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
-include '../includes/InputHelpers.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'UserDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
 $error = null;
 try {
@@ -23,13 +25,11 @@ try {
             header('Location: users.php');
             exit;
         }
-        // preserve submitted values for re-render
-        // $username and $email already set above and will be used by the template
     }
 
     $title = 'Add user';
     ob_start();
-    include '../templates/admin_adduser.html.php';
+    include ADMIN_TEMPLATES . 'adduser.html.php';
     $output = ob_get_clean();
 
 } catch (PDOException $e) {
@@ -37,5 +37,5 @@ try {
     $output = 'Database error: ' . $e->getMessage();
 }
 
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';
 ?>

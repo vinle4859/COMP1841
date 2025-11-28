@@ -1,8 +1,11 @@
 <?php
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'MessageDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
+
 try {
-    include '../includes/DatabaseConnection.php';
-    include '../includes/DatabaseFunctions.php';
-    include '../includes/InputHelpers.php';
     $message_id = (int) post_or_redirect('message_id', 'messages.php');
     deleteMessage($pdo, $message_id);
     header('Location: messages.php');
@@ -13,6 +16,6 @@ try {
 }
 
 if (!empty($output)) {
-    include '../templates/admin_layout.html.php';
+    include ADMIN_TEMPLATES . 'layout.html.php';
 }
 ?>

@@ -1,31 +1,30 @@
 <?php
 // Admin: Edit an existing answer
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
-include '../includes/InputHelpers.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
+include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
 $error = null;
 $answer_id = get_or_redirect('id', 'questions.php');
 
-// Get the answer
 $answer = getAnswer($pdo, $answer_id);
 if (!$answer) {
     header('Location: questions.php');
     exit;
 }
 
-// Get the question for context and redirect
 $question = getQuestion($pdo, $answer['question_id']);
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $content = trim($_POST['content'] ?? '');
     
     if ($content === '') {
         $error = 'Answer content is required.';
     } else {
-        // Handle image upload if provided
-        $image = $answer['image']; // Keep existing image by default
+        $image = $answer['image'];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $allowed = ['image/jpeg', 'image/png', 'image/gif'];
@@ -34,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (in_array($fileType, $allowed) && $_FILES['image']['size'] <= 2 * 1024 * 1024) {
                 $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
                 $newName = 'answer_' . time() . '_' . uniqid() . '.' . $ext;
-                $destination = '../images/' . $newName;
+                $destination = IMAGES_PATH . $newName;
                 
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
                     $image = $newName;
@@ -58,6 +57,6 @@ $title = 'Edit Answer';
 $activePage = 'questions';
 
 ob_start();
-include '../templates/editanswer.html.php';
+include ADMIN_TEMPLATES . 'editanswer.html.php';
 $output = ob_get_clean();
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';

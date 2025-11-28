@@ -1,13 +1,15 @@
 <?php
-// Admin inbox (moved into admin/)
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
+// Admin inbox
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'MessageDbFunctions.php';
 
 $messages = getMessageList($pdo);
 $title = 'Admin Inbox';
 $activePage = 'messages';
 ob_start();
-include '../templates/admin_messages.html.php';
+include ADMIN_TEMPLATES . 'messages.html.php';
 $output = ob_get_clean();
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';
 

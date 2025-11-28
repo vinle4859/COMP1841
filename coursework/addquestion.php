@@ -1,12 +1,12 @@
 <?php
-
-include 'includes/DataBaseFunctions.php';
-include 'includes/InputHelpers.php';
+include 'includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
 if (isset($_POST['content'])) {
     try {
-        include 'includes/DatabaseConnection.php';
-
         // Read and trim inputs directly
         $content = trim($_POST['content'] ?? '');
         $titleInput = trim($_POST['title'] ?? '');
@@ -22,7 +22,7 @@ if (isset($_POST['content'])) {
             $users = selectAll($pdo, "user_account");
             $modules = selectAll($pdo, "module");
             ob_start();
-            include 'templates/addquestion.html.php';
+            include PUBLIC_TEMPLATES . 'addquestion.html.php';
             $output = ob_get_clean();
         } else {
             // Handle optional image upload
@@ -37,7 +37,7 @@ if (isset($_POST['content'])) {
                 $users = selectAll($pdo, "user_account");
                 $modules = selectAll($pdo, "module");
                 ob_start();
-                include 'templates/addquestion.html.php';
+                include PUBLIC_TEMPLATES . 'addquestion.html.php';
                 $output = ob_get_clean();
             } else {
                 // Success - image uploaded or no image provided
@@ -52,14 +52,13 @@ if (isset($_POST['content'])) {
         $output = 'Database error: ' . $e->getMessage();
     }
 } else {
-    include 'includes/DatabaseConnection.php';  
     $title = 'Add new question';
     $activePage = 'addquestion';
     $users = selectAll($pdo, "user_account");
     $modules = selectAll($pdo, "module");
     ob_start();
-    include 'templates/addquestion.html.php';
+    include PUBLIC_TEMPLATES . 'addquestion.html.php';
     $output = ob_get_clean();
 }
-include 'templates/layout.html.php';
+include PUBLIC_TEMPLATES . 'layout.html.php';
 ?>

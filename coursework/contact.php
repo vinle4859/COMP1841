@@ -1,13 +1,15 @@
 <?php
+include 'includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'MessageDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 
-include 'includes/DatabaseFunctions.php';
-include 'includes/InputHelpers.php';
 // Initialize form variables to avoid undefined variable notices in the template
 $name = $email = $subject = $body = '';
 $error = $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        include 'includes/DatabaseConnection.php';
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $subject = trim($_POST['subject'] ?? '');
@@ -31,6 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Contact';
 $activePage = 'contact';
 ob_start();
-include 'templates/contact.html.php';
+include PUBLIC_TEMPLATES . 'contact.html.php';
 $output = ob_get_clean();
-include 'templates/layout.html.php';
+include PUBLIC_TEMPLATES . 'layout.html.php';

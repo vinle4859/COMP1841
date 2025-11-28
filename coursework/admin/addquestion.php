@@ -1,7 +1,10 @@
 <?php
-include '../includes/DatabaseFunctions.php';
-include '../includes/InputHelpers.php';
-include '../includes/DatabaseConnection.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $content = trim($_POST['content'] ?? '');
@@ -9,31 +12,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = trim($_POST['user'] ?? '');
         $module = trim($_POST['module'] ?? '');
         
-        // Validate required fields FIRST
         if ($content === '' || $titleInput === '' || $module === '') {
             $error = 'Please enter the question title, content, and select a module.';
             $title = 'Add new question';
             $users = selectAll($pdo, "user_account");
             $modules = selectAll($pdo, "module");
             ob_start();
-            include '../templates/addquestion.html.php';
+            include PUBLIC_TEMPLATES . 'addquestion.html.php';
             $output = ob_get_clean();
         } else {
-            // Handle optional image upload
             $imageFilename = null;
-            $uploadResult = handleImageUpload('image', '../images/');
+            $uploadResult = handleImageUpload('image', IMAGES_PATH);
             
             if (!$uploadResult['success']) {
-                // Image upload failed (but image is optional, so show error but allow retry)
                 $error = 'Image upload failed: ' . $uploadResult['error'];
                 $title = 'Add new question';
                 $users = selectAll($pdo, "user_account");
                 $modules = selectAll($pdo, "module");
                 ob_start();
-                include '../templates/addquestion.html.php';
+                include PUBLIC_TEMPLATES . 'addquestion.html.php';
                 $output = ob_get_clean();
             } else {
-                // Success - image uploaded or no image provided
                 $imageFilename = $uploadResult['filename'];
                 addQuestion($pdo, $content, $imageFilename, $titleInput, $user, $module);
                 header('location: questions.php');
@@ -49,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $users = selectAll($pdo, "user_account");
     $modules = selectAll($pdo, "module");
     ob_start();
-    include '../templates/addquestion.html.php';
+    include PUBLIC_TEMPLATES . 'addquestion.html.php';
     $output = ob_get_clean();
 }
 
-include '../templates/admin_layout.html.php';
+include ADMIN_TEMPLATES . 'layout.html.php';
 ?>

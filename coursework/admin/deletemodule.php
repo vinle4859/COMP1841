@@ -1,8 +1,11 @@
 <?php
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'ModuleDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
+
 try {
-    include '../includes/DatabaseConnection.php';
-    include '../includes/DatabaseFunctions.php';
-    include '../includes/InputHelpers.php';
     $module_id = (int) post_or_redirect('module_id', 'modules.php');
     deleteModule($pdo, $module_id);
     header('Location: modules.php');
@@ -13,6 +16,6 @@ try {
 }
 
 if (!empty($output)) {
-    include '../templates/admin_layout.html.php';
+    include ADMIN_TEMPLATES . 'layout.html.php';
 }
 ?>

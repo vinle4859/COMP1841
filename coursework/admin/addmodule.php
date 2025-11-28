@@ -1,9 +1,10 @@
 <?php
 // Handler for adding modules - POST only, redirects back to modules.php
-include '../includes/DatabaseFunctions.php';
-include '../includes/DatabaseConnection.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'ModuleDbFunctions.php';
 
-// Only handle POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: modules.php');
     exit;

@@ -1,8 +1,10 @@
 <?php
 // Handler for adding answers from public question detail page
 // This file only handles POST, then redirects back
-include 'includes/DatabaseConnection.php';
-include 'includes/DatabaseFunctions.php';
+include 'includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
 
 // Must have question_id
 if (!isset($_POST['question_id']) || !is_numeric($_POST['question_id'])) {

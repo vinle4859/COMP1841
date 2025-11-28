@@ -1,7 +1,9 @@
 <?php
 // Restore a soft-deleted module
-include '../includes/DatabaseConnection.php';
-include '../includes/DatabaseFunctions.php';
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'ModuleDbFunctions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['module_id'])) {
     $module_id = (int) $_POST['module_id'];

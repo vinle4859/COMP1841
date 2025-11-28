@@ -203,6 +203,30 @@ header#admin + .admin-container > nav {
     background: #C0392B; /* 10% darker red */
 }
 
+/* ========================================
+   ADMIN OVERRIDES FOR QUESTION CARD BUTTONS
+   Override public blue buttons to admin purple
+   ======================================== */
+.admin-container .btn-view {
+    background-color: var(--admin-accent);
+}
+
+.admin-container .btn-view:hover {
+    background-color: #7D3C98;
+}
+
+.admin-container .question-title a {
+    color: var(--admin-sidebar);
+}
+
+.admin-container .question-title a:hover {
+    color: var(--admin-accent);
+}
+
+.admin-container .question-meta a {
+    color: var(--admin-accent);
+}
+
 .btn-success {
     background: var(--admin-success);
     color: #fff;
@@ -381,6 +405,19 @@ tbody tr:last-child td {
     color: #fff;
 }
 
+/* Inline action forms (restore, delete) in table cells */
+.actions form,
+td.actions form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: none;
+    vertical-align: middle;
+}
+
 /* ========================================
    FORMS
    ======================================== */
@@ -493,51 +530,40 @@ form p:last-of-type {
    ======================================== */
 .admin-filters {
     display: flex;
-    align-items: flex-end;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.75rem;
     margin: 0 0 1.5rem 0;
-    padding: 1rem 1.25rem;
-    background-color: #fff;
+    padding: 1rem;
+    background-color: var(--admin-bg);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-subtle);
     flex-wrap: wrap;
 }
 
-.admin-filters .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.admin-filters label {
+.admin-filters input[type="text"] {
+    min-width: 200px;
     margin: 0;
-    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #fff;
+    border: 1px solid var(--admin-border);
 }
 
 .admin-filters select {
-    min-width: 180px;
+    min-width: 150px;
     margin: 0;
     padding: 0.5rem 0.75rem;
     height: auto;
     background-color: #fff;
     color: var(--admin-text);
-    border: 2px solid var(--admin-border);
-    font-size: 0.875rem;
+    border: 1px solid var(--admin-border);
+    font-size: 0.9rem;
 }
 
-.admin-filters .filter-actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.admin-filters .filter-actions .admin-action {
+.admin-filters .admin-action {
     margin: 0;
     padding: 0.5rem 1rem;
 }
 
-.admin-filters .filter-actions .btn-link {
+.admin-filters .btn-link {
     padding: 0.5rem;
 }
 
@@ -585,10 +611,86 @@ form p:last-of-type {
     border: 1px solid #1976D2;
 }
 
+.status-read {
+    background-color: #FFF3E0;
+    color: #F57C00;
+    border: 1px solid #F57C00;
+}
+
 .status-resolved {
     background-color: #E8F5E9;
     color: var(--admin-success);
     border: 1px solid var(--admin-success);
+}
+
+/* ========================================
+   MESSAGE DETAIL - SIMPLE HORIZONTAL LAYOUT
+   ======================================== */
+.message-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.message-detail-header h2 {
+    margin: 0.5rem 0 0 0;
+}
+
+.message-status-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.inline-status-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.inline-status-form label {
+    margin: 0;
+    font-weight: 600;
+}
+
+.inline-status-form select {
+    margin: 0;
+    width: auto;
+    min-width: 120px;
+    background-color: #fff;
+    border: 1px solid var(--admin-border);
+    box-shadow: none;
+}
+
+.message-detail-body {
+    background: var(--admin-content-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-subtle);
+}
+
+.message-detail-body p {
+    margin: 0.5rem 0;
+}
+
+.message-detail-body hr {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid var(--admin-border);
+}
+
+.message-content-text {
+    line-height: 1.6;
+    white-space: pre-wrap;
 }
 
 /* Restore button styling */
@@ -605,6 +707,7 @@ form p:last-of-type {
     transition: background-color 0.2s ease;
     vertical-align: middle;
     line-height: 1.5;
+    margin: 0;
 }
 
 .btn-restore:hover {

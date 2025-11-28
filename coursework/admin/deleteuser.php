@@ -1,8 +1,11 @@
 <?php
+include '../includes/config.php';
+include INCLUDES_PATH . 'DatabaseConnection.php';
+include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'UserDbFunctions.php';
+include INCLUDES_PATH . 'InputHelpers.php';
+
 try {
-    include '../includes/DatabaseConnection.php';
-    include '../includes/DatabaseFunctions.php';
-    include '../includes/InputHelpers.php';
     $user_id = (int) post_or_redirect('user_id', 'users.php');
     deleteUser($pdo, $user_id);
     header('Location: users.php');
@@ -13,6 +16,6 @@ try {
 }
 
 if (!empty($output)) {
-    include '../templates/admin_layout.html.php';
+    include ADMIN_TEMPLATES . 'layout.html.php';
 }
 ?>
