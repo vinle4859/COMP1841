@@ -1,0 +1,12 @@
+<?php
+// Restore a soft-deleted user
+include '../includes/DatabaseConnection.php';
+include '../includes/DatabaseFunctions.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
+    $user_id = (int) $_POST['user_id'];
+    restoreUser($pdo, $user_id);
+}
+
+header('Location: users.php');
+exit;

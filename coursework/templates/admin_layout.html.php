@@ -15,11 +15,11 @@
         <div class="admin-container">
             <nav>
                 <ul>
-                    <li><a href="questions.php">Question List</a></li>
-                    <li><a href="messages.php">Inbox (Messages)</a></li>
-                    <li><a href="users.php">Users</a></li>
-                    <li><a href="modules.php">Modules</a></li>
-                    <li><a href="addquestion.php">Add question</a></li>
+                    <li><a href="questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Question List</a></li>
+                    <li><a href="messages.php" <?= (isset($activePage) && $activePage === 'messages') ? 'class="active"' : '' ?>>Inbox (Messages)</a></li>
+                    <li><a href="users.php" <?= (isset($activePage) && $activePage === 'users') ? 'class="active"' : '' ?>>Users</a></li>
+                    <li><a href="modules.php" <?= (isset($activePage) && $activePage === 'modules') ? 'class="active"' : '' ?>>Modules</a></li>
+                    <!-- 'Add question' moved to a button at the bottom of the question list -->
                     <li><a href="../index.php">Public Site</a></li>
                 </ul>
             </nav>

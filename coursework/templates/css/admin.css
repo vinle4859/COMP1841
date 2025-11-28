@@ -1,51 +1,81 @@
-/* Admin area styles */
-
-/* Header */
-header#admin { 
-    background-color: #666fd2; 
-    color: #ffffff;
-    padding: 1rem;
+/* ========================================
+   CSS VARIABLES - ADMIN LAYOUT (Dashboard)
+   ======================================== */
+:root {
+    /* SET B: Admin Layout Colors */
+    --admin-sidebar: #2C3E50;       /* Dark Slate - Sidebar/Nav */
+    --admin-accent: #8E44AD;        /* Purple - Admin Accents */
+    --admin-bg: #ECF0F1;            /* Cool White - Dashboard Background */
+    --admin-content-bg: #FFFFFF;    /* White - Content containers/forms */
+    --admin-danger: #E74C3C;        /* Red - Destructive Actions */
+    --admin-success: #27AE60;       /* Green - Success/Status */
+    --admin-text: #2C3338;          /* Primary Text */
+    --admin-text-light: #7F8C8D;    /* Secondary Text */
+    --admin-border: #BDC3C7;        /* Border Color */
+    
+    /* Typography */
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --line-height-base: 1.6;
+    
+    /* Shadows & Borders */
+    --shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 6px;
 }
 
-/* Sidebar (strong selector to override global nav rules) */
+/* ========================================
+   ADMIN HEADER
+   ======================================== */
+header#admin { 
+    background-color: var(--admin-sidebar);
+    color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-medium);
+}
+
+header#admin h1 {
+    color: white;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* ========================================
+   ADMIN LAYOUT
+   ======================================== */
+.admin-container { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    align-items: stretch; 
+    max-width: 100%; 
+    min-height: calc(100vh - 80px);
+    background-color: var(--admin-bg);
+}
+
+/* ========================================
+   SIDEBAR NAVIGATION
+   ======================================== */
 header#admin + .admin-container > nav {
-    flex: 0 0 240px;
-    width: 240px;
-    background-color: #565372;
-    min-height: 100vh;
+    flex: 0 0 260px;
+    width: 260px;
+    background-color: var(--admin-sidebar);
+    min-height: calc(100vh - 80px);
     display: block;
     z-index: 10;
+    box-shadow: var(--shadow-medium);
 }
 
-/* Layout Wrapper */
-.admin-container { 
-    display: flex; 
-    flex-wrap: nowrap; 
-    align-items: flex-start; 
-    /* width: 100%;  */
-    max-width: 100%; 
-}
-
-/* Sidebar Navigation */
-/* Layout wrapper */
-.admin-container { 
-    display: flex; 
-    flex-wrap: nowrap; 
-    align-items: flex-start; 
-    max-width: 100%; 
-}
-
-/* Nav list */
+/* Navigation List */
 .admin-container nav ul {
     list-style: none;
-    padding: 1rem;
+    padding: 1.25rem;
     margin: 0;
     display: block;
     width: 100%;
 }
 
 .admin-container nav li {
-    margin: 0.5rem 0;
+    margin: 0.35rem 0;
     display: block;
     text-align: left;
     padding: 0;
@@ -54,30 +84,544 @@ header#admin + .admin-container > nav {
 /* Navigation Links */
 .admin-container nav a { 
     text-decoration: none; 
-    /* [FIX] Changed color to Off-White for high contrast against dark purple */
-    color: #E2E8F0; 
-    font-weight: 700; 
-    font-size: 1.05rem; 
-    
-    /* [UX IMPROVEMENT] Make the link behave like a block button */
+    color: #ECF0F1;
+    font-weight: 600; 
+    font-size: 0.95rem; 
     display: block; 
     padding: 0.75rem 1rem;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s;
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease;
 }
 
 .admin-container nav a:hover { 
-    /* [UX IMPROVEMENT] Visual feedback on hover */
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #FFFFFF; 
+    background-color: var(--admin-accent);
+    color: #FFFFFF;
+    transform: translateX(4px);
 }
 
-/* Main content */
+.admin-container nav a.active {
+    background-color: var(--admin-accent);
+    color: #FFFFFF;
+    font-weight: 700;
+    border-left: 4px solid #FFFFFF;
+}
+
+/* ========================================
+   MAIN CONTENT AREA
+   ======================================== */
 .admin-container > main { 
     flex: 1 1 auto; 
-    background: #fff; 
+    background: var(--admin-bg);
     padding: 2rem; 
     box-sizing: border-box; 
     margin: 0; 
     max-width: none; 
+}
+
+/* Typography */
+.admin-container h1,
+.admin-container h2,
+.admin-container h3 {
+    color: var(--admin-sidebar);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.admin-container h2 {
+    font-size: 1.75rem;
+}
+
+.admin-container p {
+    line-height: var(--line-height-base);
+    color: var(--admin-text);
+}
+
+/* ========================================
+   BUTTONS & ACTIONS
+   ======================================== */
+.admin-action {
+    display: inline-block;
+    padding: 0.65rem 1.25rem;
+    background: var(--admin-accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    margin-left: 0.75rem;
+    transition: background-color 0.2s ease;
+    box-shadow: var(--shadow-subtle);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-stack);
+    vertical-align: middle;
+}
+
+.admin-action:hover {
+    background: #7D3C98; /* 10% darker purple */
+}
+
+/* Button Variants */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-family: var(--font-stack);
+}
+
+.btn-primary { 
+    background: var(--admin-accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #7D3C98;
+}
+
+.btn-secondary { 
+    background: #f3f4f6;
+    color: var(--admin-text);
+    border-color: var(--admin-border);
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.btn-danger { 
+    background: var(--admin-danger);
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #C0392B; /* 10% darker red */
+}
+
+.btn-success {
+    background: var(--admin-success);
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: #229954; /* 10% darker green */
+}
+
+.btn-link { 
+    background: transparent;
+    color: var(--admin-accent);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* Header area for list pages: align title and action */
+.admin-list-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.admin-list-header h2 {
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+.admin-list-header .admin-action {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Questions summary styling */
+.questions-summary {
+    flex: 1;
+}
+
+.questions-summary h2 {
+    margin: 0 0 0.25rem 0;
+}
+
+.questions-summary .summary-text {
+    margin: 0;
+    color: var(--admin-text-light);
+    font-size: 0.9rem;
+}
+
+/* Inline add form (modules page) */
+.inline-add-form {
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+}
+
+.inline-add-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.inline-add-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.inline-add-row input[type="text"] {
+    flex: 1;
+    margin: 0;
+}
+
+.inline-add-row .admin-action {
+    margin: 0;
+    height: auto;
+}
+
+/* Keep module and title on a single line where possible */
+.question-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0 0 0.5rem 0;
+}
+.question-header a { color: inherit; font-weight: 700; text-decoration: none; }
+
+/* ========================================
+   TABLES
+   ======================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--admin-content-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-subtle);
+}
+
+thead {
+    background: var(--admin-sidebar);
+    color: #fff;
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-text);
+}
+
+tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+    background: #F8F9FA;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Action cells for edit/delete buttons */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.confirm-delete {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    line-height: 1;
+}
+
+.confirm-delete input[type="submit"] {
+    background: transparent;
+    border: none;
+    color: var(--admin-danger);
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease;
+    font-family: var(--font-stack);
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.confirm-delete input[type="submit"]:hover {
+    background: var(--admin-danger);
+    color: #fff;
+}
+
+/* ========================================
+   FORMS
+   ======================================== */
+form {
+    background: var(--admin-content-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-subtle);
+    max-width: 600px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--admin-sidebar);
+    font-size: 0.9375rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--admin-border);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+    font-size: 0.9375rem;
+    color: var(--admin-text);
+    background: var(--admin-content-bg);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+}
+
+input[type="submit"].admin-action {
+    width: auto;
+    padding: 0.65rem 1.25rem;
+    background: var(--admin-accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-stack);
+    font-weight: 600;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+form p {
+    margin-bottom: 1.25rem;
+}
+
+form p:last-of-type {
+    margin-bottom: 0;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Error and success messages in forms */
+.error-message {
+    background: #FEE;
+    color: var(--admin-danger);
+    padding: 0.875rem 1rem;
+    border-left: 4px solid var(--admin-danger);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+
+.success-message {
+    background: #E8F5E9;
+    color: var(--admin-success);
+    padding: 0.875rem 1rem;
+    border-left: 4px solid var(--admin-success);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+    header#admin { padding: 0.75rem 1rem; }
+    .admin-container { flex-direction: column; }
+    header#admin + .admin-container > nav { width: 100%; min-height: auto; }
+    .admin-container > main { padding: 1rem; }
+}
+
+/* ========================================
+   ADMIN FILTER FORM
+   ======================================== */
+.admin-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: 0 0 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-subtle);
+    flex-wrap: wrap;
+}
+
+.admin-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.admin-filters label {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.admin-filters select {
+    min-width: 180px;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    height: auto;
+    background-color: #fff;
+    color: var(--admin-text);
+    border: 2px solid var(--admin-border);
+    font-size: 0.875rem;
+}
+
+.admin-filters .filter-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-filters .filter-actions .admin-action {
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+
+.admin-filters .filter-actions .btn-link {
+    padding: 0.5rem;
+}
+
+/* ========================================
+   QUICK ANSWER FORM (Admin)
+   ======================================== */
+.quick-answer-form {
+    margin-top: 1.5rem;
+}
+
+.quick-answer-form textarea {
+    max-width: 100%;
+    min-height: 100px;
+}
+
+/* ========================================
+   STATUS BADGES
+   ======================================== */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.status-active {
+    background-color: #D5F4E6;
+    color: var(--admin-success);
+    border: 1px solid var(--admin-success);
+}
+
+.status-deleted, .status-archived {
+    background-color: #FADBD8;
+    color: var(--admin-danger);
+    border: 1px solid var(--admin-danger);
+}
+
+/* Message status badges */
+.status-new {
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border: 1px solid #1976D2;
+}
+
+.status-resolved {
+    background-color: #E8F5E9;
+    color: var(--admin-success);
+    border: 1px solid var(--admin-success);
+}
+
+/* Restore button styling */
+.btn-restore {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--admin-accent);
+    color: #fff !important;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+.btn-restore:hover {
+    background-color: #7D3C98;
+}
+
+/* Deleted row styling */
+.row-deleted {
+    opacity: 0.7;
+    background-color: #fafafa;
+}
+
+.row-deleted td {
+    color: var(--admin-text-light);
+}
+
+.row-deleted .deleted-name {
+    font-style: italic;
+    color: var(--admin-danger);
 }

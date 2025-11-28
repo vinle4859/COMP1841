@@ -3,14 +3,17 @@ try {
     include 'includes/DatabaseConnection.php';
     include 'includes/DataBaseFunctions.php';
 
-    // $sql = 'SELECT question_id, title, content, `image`, email, username, module_name 
-    // FROM question
-    // INNER JOIN user_account ON question.user_id = user_account.user_id
-    // INNER JOIN module ON question.module_id = module.module_id';
-    // $questions = $pdo->query($sql);
-    $questions = getQuestionList($pdo);
+    // Get filter parameters
+    $moduleFilter = isset($_GET['module']) && $_GET['module'] !== '' ? intval($_GET['module']) : null;
+    
+    // Get all active modules for the filter dropdown (public view)
+    $modules = selectAll($pdo, 'module');
+    
+    // Get questions - public view hides questions from deleted users/modules
+    $questions = getQuestionList($pdo, $moduleFilter, null, true);
     $title = 'question list';
     $totalQuestions = getTotalQuestions($pdo);
+    $activePage = 'questions';
 
     ob_start();
     include 'templates/questions.html.php';

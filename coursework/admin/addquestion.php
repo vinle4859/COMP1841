@@ -1,37 +1,57 @@
 <?php
-include '../includes/DataBaseFunctions.php';
-if (isset($_POST['content'])) {
+include '../includes/DatabaseFunctions.php';
+include '../includes/InputHelpers.php';
+include '../includes/DatabaseConnection.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        include '../includes/DatabaseConnection.php';
-
-        // $sql = 'INSERT INTO question SET content = :content, image = :image, 
-        // title = :title, user_id = :user_id, module_id = :module_id';
-        // $stmt = $pdo->prepare($sql);
-        // $stmt->bindValue(':content', $_POST['content']);
-        // $stmt->bindValue(':image', strtolower($_POST['image']) . ".jpg");
-        // $stmt->bindValue(':title', $_POST['title']);
-        // $stmt->bindValue(':module_id', $_POST['module']);
-        // $stmt->bindValue(':user_id', $_POST['user']);
-        // $stmt->execute();   
-        addQuestion($pdo, $_POST['content'], $_POST['image'], 
-        $_POST['title'], $_POST['user'], $_POST['module']);
-        header('location: questions.php');
+        $content = trim($_POST['content'] ?? '');
+        $titleInput = trim($_POST['title'] ?? '');
+        $user = trim($_POST['user'] ?? '');
+        $module = trim($_POST['module'] ?? '');
+        
+        // Validate required fields FIRST
+        if ($content === '' || $titleInput === '' || $module === '') {
+            $error = 'Please enter the question title, content, and select a module.';
+            $title = 'Add new question';
+            $users = selectAll($pdo, "user_account");
+            $modules = selectAll($pdo, "module");
+            ob_start();
+            include '../templates/addquestion.html.php';
+            $output = ob_get_clean();
+        } else {
+            // Handle optional image upload
+            $imageFilename = null;
+            $uploadResult = handleImageUpload('image', '../images/');
+            
+            if (!$uploadResult['success']) {
+                // Image upload failed (but image is optional, so show error but allow retry)
+                $error = 'Image upload failed: ' . $uploadResult['error'];
+                $title = 'Add new question';
+                $users = selectAll($pdo, "user_account");
+                $modules = selectAll($pdo, "module");
+                ob_start();
+                include '../templates/addquestion.html.php';
+                $output = ob_get_clean();
+            } else {
+                // Success - image uploaded or no image provided
+                $imageFilename = $uploadResult['filename'];
+                addQuestion($pdo, $content, $imageFilename, $titleInput, $user, $module);
+                header('location: questions.php');
+                exit;
+            }
+        }
     } catch (PDOException $e) {
-    $title = 'An error has occured';
-    $output = 'Database error: ' . $e->getMessage();
+        $title = 'An error has occured';
+        $output = 'Database error: ' . $e->getMessage();
     }
 } else {
-    include '../includes/DatabaseConnection.php';  
     $title = 'Add new question';
-    // $sql_users = 'SELECT * FROM user_account';
-    // $sql_modules = 'SELECT * FROM module';
-    // $users = $pdo->query($sql_users);
-    // $modules = $pdo->query($sql_modules);
     $users = selectAll($pdo, "user_account");
     $modules = selectAll($pdo, "module");
     ob_start();
     include '../templates/addquestion.html.php';
     $output = ob_get_clean();
 }
+
 include '../templates/admin_layout.html.php';
 ?>

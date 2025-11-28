@@ -6,12 +6,47 @@ function query($pdo, $sql, $parameters=[]) {
     return $query;
 }
 
-function getQuestionList($pdo) {
-    $sql = 'SELECT question_id, title, content, `image`, email, username, module_name 
-    FROM question
-    INNER JOIN user_account ON question.user_id = user_account.user_id
-    INNER JOIN module ON question.module_id = module.module_id';
-    $questions = query($pdo, $sql);
+function getQuestionList($pdo, $module_id = null, $user_id = null, $publicView = false) {
+    // For public view: show [Deleted]/[Archived] as replacement names
+    // For admin view: show username [Deleted] / modulename [Archived] labels
+    if ($publicView) {
+        $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, 
+                u.email, 
+                CASE WHEN u.status = \'deleted\' THEN \'[Deleted]\' ELSE u.username END as username,
+                CASE WHEN m.status = \'deleted\' THEN \'[Archived]\' ELSE m.module_name END as module_name, 
+                m.module_id, u.user_id, u.status as user_status, m.status as module_status
+        FROM question q
+        INNER JOIN user_account u ON q.user_id = u.user_id
+        INNER JOIN module m ON q.module_id = m.module_id';
+    } else {
+        $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, 
+                u.email, 
+                CASE WHEN u.status = \'deleted\' THEN CONCAT(u.username, \' [Deleted]\') ELSE u.username END as username,
+                CASE WHEN m.status = \'deleted\' THEN CONCAT(m.module_name, \' [Archived]\') ELSE m.module_name END as module_name, 
+                m.module_id, u.user_id, u.status as user_status, m.status as module_status
+        FROM question q
+        INNER JOIN user_account u ON q.user_id = u.user_id
+        INNER JOIN module m ON q.module_id = m.module_id';
+    }
+    
+    $params = [];
+    $conditions = [];
+    
+    if ($module_id !== null) {
+        $conditions[] = 'q.module_id = :module_id';
+        $params[':module_id'] = $module_id;
+    }
+    if ($user_id !== null) {
+        $conditions[] = 'q.user_id = :user_id';
+        $params[':user_id'] = $user_id;
+    }
+    
+    if (!empty($conditions)) {
+        $sql .= ' WHERE ' . implode(' AND ', $conditions);
+    }
+    
+    $sql .= ' ORDER BY q.created_at DESC';
+    $questions = query($pdo, $sql, $params);
     return $questions;
 }
 
@@ -35,7 +70,8 @@ function getById($pdo, $table, $id) {
         'question' => 'question_id',
         'user_account' => 'user_id',
         'module' => 'module_id',
-        'message' => 'message_id'
+        'message' => 'message_id',
+        'answer' => 'answer_id'
     ];
 
     if (!isset($table_ids[$table])) {
@@ -52,6 +88,77 @@ function getById($pdo, $table, $id) {
 function getQuestion($pdo, $question_id) {
     $question = getById($pdo, 'question', $question_id);
     return $question;
+}
+
+/**
+ * Return a question row (with user/module info) and its answers (with user info).
+ * Returns ['question' => array|null, 'answers' => array]
+ * @param bool $publicView If true, show [Deleted]/[Archived] as replacement; if false, append to name
+ */
+function getQuestionDetail($pdo, $question_id, $publicView = false) {
+    if ($publicView) {
+        // Public view: [Deleted]/[Archived] replaces the name
+        $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, 
+                CASE WHEN m.status = \'deleted\' THEN \'[Archived]\' ELSE m.module_name END as module_name, 
+                CASE WHEN u.status = \'deleted\' THEN \'[Deleted]\' ELSE u.username END as username, 
+                u.email, q.user_id, q.module_id, u.status as user_status, m.status as module_status
+                FROM question q
+                INNER JOIN user_account u ON q.user_id = u.user_id
+                INNER JOIN module m ON q.module_id = m.module_id
+                WHERE q.question_id = :id';
+    } else {
+        // Admin view: name [Deleted]/[Archived] appended
+        $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, 
+                CASE WHEN m.status = \'deleted\' THEN CONCAT(m.module_name, \' [Archived]\') ELSE m.module_name END as module_name, 
+                CASE WHEN u.status = \'deleted\' THEN CONCAT(u.username, \' [Deleted]\') ELSE u.username END as username, 
+                u.email, q.user_id, q.module_id, u.status as user_status, m.status as module_status
+                FROM question q
+                INNER JOIN user_account u ON q.user_id = u.user_id
+                INNER JOIN module m ON q.module_id = m.module_id
+                WHERE q.question_id = :id';
+    }
+    $query = query($pdo, $sql, [':id' => $question_id]);
+    $question = $query->fetch();
+
+    if ($publicView) {
+        // Public view: [Deleted] replaces username for answers
+        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, 
+                CASE WHEN ua.status = \'deleted\' THEN \'[Deleted]\' ELSE ua.username END as username, 
+                ua.email, ua.status as user_status
+                FROM answer a
+                INNER JOIN user_account ua ON a.user_id = ua.user_id
+                WHERE a.question_id = :id
+                ORDER BY a.created_at ASC';
+    } else {
+        // Admin view: username [Deleted] appended for answers
+        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, 
+                CASE WHEN ua.status = \'deleted\' THEN CONCAT(ua.username, \' [Deleted]\') ELSE ua.username END as username, 
+                ua.email, ua.status as user_status
+                FROM answer a
+                INNER JOIN user_account ua ON a.user_id = ua.user_id
+                WHERE a.question_id = :id
+                ORDER BY a.created_at ASC';
+    }
+    $answersQuery = query($pdo, $sql, [':id' => $question_id]);
+    $answers = $answersQuery->fetchAll();
+
+    return ['question' => $question, 'answers' => $answers];
+}
+
+/**
+ * Add a new answer to a question.
+ */
+function addAnswer($pdo, $question_id, $content, $user_id, $image = null) {
+    $sql = 'INSERT INTO answer (content, image, user_id, question_id) 
+            VALUES (:content, :image, :user_id, :question_id)';
+    $params = [
+        ':content' => $content,
+        ':image' => $image,
+        ':user_id' => $user_id,
+        ':question_id' => $question_id
+    ];
+    query($pdo, $sql, $params);
+    return $pdo->lastInsertId();
 }
 
 function getModule($pdo, $module_id) {
@@ -86,20 +193,16 @@ function deleteQuestion($pdo, $question_id) {
 }
 
 function deleteUser($pdo, $user_id) {
-    // Dissociate questions from this user (keep the questions) then delete the user.
-    $sql = 'UPDATE question SET user_id = NULL WHERE user_id = :id';
-    query($pdo, $sql, [':id' => $user_id]);
-
-    $sql = 'DELETE FROM user_account WHERE user_id = :id';
+    // Soft delete: mark user as deleted instead of removing from database
+    // This preserves referential integrity - questions/answers keep valid foreign keys
+    $sql = 'UPDATE user_account SET status = \'deleted\' WHERE user_id = :id';
     query($pdo, $sql, [':id' => $user_id]);
 }
 
 function deleteModule($pdo, $module_id) {
-    // Dissociate questions from this module (keep the questions) then delete module.
-    $sql = 'UPDATE question SET module_id = NULL WHERE module_id = :id';
-    query($pdo, $sql, [':id' => $module_id]);
-
-    $sql = 'DELETE FROM module WHERE module_id = :id';
+    // Soft delete: mark module as deleted instead of removing from database
+    // This preserves referential integrity - questions keep valid foreign keys
+    $sql = 'UPDATE module SET status = \'deleted\' WHERE module_id = :id';
     query($pdo, $sql, [':id' => $module_id]);
 }
 
@@ -109,9 +212,25 @@ function updateUser($pdo, $user_id, $username, $email) {
     query($pdo, $sql, $params);
 }
 
+function addUser($pdo, $username, $email, $password) {
+    $sql = 'INSERT INTO user_account (username, email, `password`) VALUES (:username, :email, :password)';
+    $params = [':username' => $username, ':email' => $email, ':password' => $password];
+    query($pdo, $sql, $params);
+    return $pdo->lastInsertId();
+}
+
 function updateModule($pdo, $module_id, $module_name) {
     $sql = 'UPDATE module SET module_name = :module_name WHERE module_id = :id';
     $params = [':module_name' => $module_name, ':id' => $module_id];
+    query($pdo, $sql, $params);
+}
+
+/**
+ * Insert a new module and return its id.
+ */
+function addModule($pdo, $module_name) {
+    $sql = 'INSERT INTO module (module_name) VALUES (:module_name)';
+    $params = [':module_name' => $module_name];
     query($pdo, $sql, $params);
 }
 
@@ -128,14 +247,20 @@ function addQuestion($pdo, $content, $image, $title, $user_id, $module_id) {
     query($pdo, $sql, $parameters);
 }
 
-function selectAll($pdo, $table) {
+function selectAll($pdo, $table, $includeDeleted = false) {
     $tables = ['user_account', 'module'];
 
     // Check if the requested table is in the safe list
     if (!in_array($table, $tables)) {
         throw new \Exception("Invalid table name.");
     }
-    $sql = "SELECT * FROM $table";
+    
+    // By default, only return active records
+    if ($includeDeleted) {
+        $sql = "SELECT * FROM $table ORDER BY status ASC";
+    } else {
+        $sql = "SELECT * FROM $table WHERE status = 'active'";
+    }
     $data = query($pdo, $sql);
     return $data->fetchAll();
 }
@@ -181,4 +306,70 @@ function setMessageStatus($pdo, $message_id, $status) {
     $sql = 'UPDATE message SET status = :status WHERE message_id = :id';
     $params = [':status' => $status, ':id' => $message_id];
     query($pdo, $sql, $params);
+}
+
+function deleteMessage($pdo, $message_id) {
+    $sql = 'DELETE FROM message WHERE message_id = :id';
+    $parameters = [':id' => $message_id];
+    query($pdo, $sql, $parameters);
+}
+
+/**
+ * Restore a soft-deleted user
+ */
+function restoreUser($pdo, $user_id) {
+    $sql = 'UPDATE user_account SET status = \'active\' WHERE user_id = :id';
+    query($pdo, $sql, [':id' => $user_id]);
+}
+
+/**
+ * Restore a soft-deleted module
+ */
+function restoreModule($pdo, $module_id) {
+    $sql = 'UPDATE module SET status = \'active\' WHERE module_id = :id';
+    query($pdo, $sql, [':id' => $module_id]);
+}
+
+/**
+ * Get a single answer by ID
+ */
+function getAnswer($pdo, $answer_id) {
+    return getById($pdo, 'answer', $answer_id);
+}
+
+/**
+ * Get all answers for a specific question (admin view with user info)
+ */
+function getAnswersByQuestion($pdo, $question_id) {
+    $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, a.question_id,
+            CASE WHEN u.status = \'deleted\' THEN CONCAT(u.username, \' [Deleted]\') ELSE u.username END as username,
+            u.email, u.user_id, u.status as user_status
+            FROM answer a
+            INNER JOIN user_account u ON a.user_id = u.user_id
+            WHERE a.question_id = :question_id
+            ORDER BY a.created_at ASC';
+    $query = query($pdo, $sql, [':question_id' => $question_id]);
+    return $query->fetchAll();
+}
+
+/**
+ * Update an existing answer
+ */
+function updateAnswer($pdo, $answer_id, $content, $image = null) {
+    if ($image !== null) {
+        $sql = 'UPDATE answer SET content = :content, image = :image WHERE answer_id = :id';
+        $params = [':content' => $content, ':image' => $image, ':id' => $answer_id];
+    } else {
+        $sql = 'UPDATE answer SET content = :content WHERE answer_id = :id';
+        $params = [':content' => $content, ':id' => $answer_id];
+    }
+    query($pdo, $sql, $params);
+}
+
+/**
+ * Delete an answer (hard delete since answers don't have dependencies)
+ */
+function deleteAnswer($pdo, $answer_id) {
+    $sql = 'DELETE FROM answer WHERE answer_id = :id';
+    query($pdo, $sql, [':id' => $answer_id]);
 }

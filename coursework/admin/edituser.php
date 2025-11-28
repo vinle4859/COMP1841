@@ -2,43 +2,50 @@
 // Moved edituser into admin/ and adjusted includes
 include '../includes/DatabaseConnection.php';
 include '../includes/DatabaseFunctions.php';
+include '../includes/InputHelpers.php';
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($id <= 0) {
-    header('Location: users.php');
-    exit;
+// Unified flow: POST uses `user_id`, GET uses `id`. Single layout include at end.
+$error = null;
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $user_id = (int) post_or_redirect('user_id', 'users.php');
+    } else {
+        $user_id = (int) get_or_redirect('id', 'users.php');
+    }
+
+    $user = getUser($pdo, $user_id);
+    if (!$user) {
+        header('Location: users.php');
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        if ($username === '' || $email === '') {
+            $error = 'Please enter a username and email address.';
+            // preserve submitted values
+            $user['username'] = $username;
+            $user['email'] = $email;
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Please enter a valid email address.';
+            $user['username'] = $username;
+            $user['email'] = $email;
+        } else {
+            updateUser($pdo, $user_id, $username, $email);
+            header('Location: users.php');
+            exit;
+        }
+    }
+
+    $title = 'Edit user';
+    ob_start();
+    include '../templates/edituser.html.php';
+    $output = ob_get_clean();
+
+} catch (PDOException $e) {
+    $title = 'Error has occured';
+    $output = 'Database error: ' . $e->getMessage();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    updateUser($pdo, $id, $username, $email);
-    header('Location: users.php');
-    exit;
-}
-
-$user = getUser($pdo, $id);
-$title = 'Edit user';
-ob_start();
-?>
-<h2>Edit user</h2>
-<?php if ($user): ?>
-    <form method="post" class="needs-validation">
-        <p>
-            <label>Username</label>
-            <input name="username" value="<?=htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8')?>">
-        </p>
-        <p>
-            <label>Email</label>
-            <input name="email" value="<?=htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8')?>">
-        </p>
-        <p>
-            <input type="submit" value="Save">
-        </p>
-    </form>
-<?php else: ?>
-    <p>User not found.</p>
-<?php endif; ?>
-<?php
-$output = ob_get_clean();
 include '../templates/admin_layout.html.php';

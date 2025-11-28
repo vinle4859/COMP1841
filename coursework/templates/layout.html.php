@@ -7,13 +7,13 @@
     <link href="/COMP1841/coursework/templates/css/questions.css" rel="stylesheet">
     </head>
     <body>
-        <header><h1>Internet question Database</h1></header>
+        <header><h1>University of Greenwich Student Forum</h1></header>
         <nav>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="questions.php">Question List</a></li>
-                <li><a href="addquestion.php">Add question</a></li>
-                <li><a href="contact.php">Contact us</a></li>
+                <li><a href="index.php" <?= (isset($activePage) && $activePage === 'home') ? 'class="active"' : '' ?>>Home</a></li>
+                <li><a href="questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Question List</a></li>
+                <li><a href="addquestion.php" <?= (isset($activePage) && $activePage === 'addquestion') ? 'class="active"' : '' ?>>Add question</a></li>
+                <li><a href="contact.php" <?= (isset($activePage) && $activePage === 'contact') ? 'class="active"' : '' ?>>Contact us</a></li>
                 <li><a href="admin/questions.php">Admin</a></li>
             </ul>
         </nav>

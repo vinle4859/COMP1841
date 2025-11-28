@@ -4,13 +4,14 @@ include 'includes/DatabaseFunctions.php';
 include 'includes/InputHelpers.php';
 // Initialize form variables to avoid undefined variable notices in the template
 $name = $email = $subject = $body = '';
-if (isset($_POST['submit'])) {
+$error = $success = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         include 'includes/DatabaseConnection.php';
-        $name = validateAndTrim('name');
-        $email = validateAndTrim('email');
-        $subject = validateAndTrim('subject');
-        $body = validateAndTrim('body');
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $subject = trim($_POST['subject'] ?? '');
+        $body = trim($_POST['body'] ?? '');
 
         if ($name === '' || $email === '' || $subject === '' || $body === '') {
             $error = 'Please fill all required fields.';
@@ -28,6 +29,7 @@ if (isset($_POST['submit'])) {
 }
 
 $title = 'Contact';
+$activePage = 'contact';
 ob_start();
 include 'templates/contact.html.php';
 $output = ob_get_clean();

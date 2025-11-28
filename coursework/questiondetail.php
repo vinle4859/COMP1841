@@ -1,28 +1,22 @@
 <?php
     include 'includes/DatabaseConnection.php';
     include 'includes/DataBaseFunctions.php';
+    include 'includes/InputHelpers.php';
+
+    // Read messages from URL (set by addanswer.php after redirect)
+    $answerError = $_GET['error'] ?? '';
+    $answerSuccess = $_GET['success'] ?? '';
 
     try {
-        // Get question info (with user and module)
-        $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, m.module_name, u.username, u.email
-                FROM question q
-                INNER JOIN user_account u ON q.user_id = u.user_id
-                INNER JOIN module m ON q.module_id = m.module_id
-                WHERE q.question_id = :id';
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $_GET['id']);
-        $stmt->execute();
-        $question = $stmt->fetch();
-
-        // Get answers for this question (with user info)
-        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, ua.username, ua.email
-                FROM answer a
-                INNER JOIN user_account ua ON a.user_id = ua.user_id
-                WHERE a.question_id = :id';
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $_GET['id']);
-        $stmt->execute();
-        $answers = $stmt->fetchAll();
+        $id = get_or_redirect('id', 'questions.php');
+        
+        // Use DatabaseFunctions helper to load question and answers (public view)
+        $detail = getQuestionDetail($pdo, $id, true);
+        $question = $detail['question'];
+        $answers = $detail['answers'];
+        
+        // Get active users list for answer dropdown
+        $users = selectAll($pdo, 'user_account');
 
         // Render the detail template into $output so layout can place it in the page
         // Set a sensible page title first (explicit if/else for clarity)
@@ -31,6 +25,7 @@
         } else {
             $title = 'Question detail';
         }
+        $activePage = 'questions';
         ob_start();
         include 'templates/questiondetail.html.php';
         $output = ob_get_clean();

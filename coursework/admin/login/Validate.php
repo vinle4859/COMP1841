@@ -8,5 +8,6 @@ if (($_POST['username'] == $ActualUsername)
     header("Location: index.php");
 } else {
     header('Location: Wrongpassword.php');
+    exit;
 }
 ?>

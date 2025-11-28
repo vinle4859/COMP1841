@@ -5,6 +5,7 @@ include '../includes/DatabaseFunctions.php';
 
 $messages = getMessageList($pdo);
 $title = 'Admin Inbox';
+$activePage = 'messages';
 ob_start();
 include '../templates/admin_messages.html.php';
 $output = ob_get_clean();

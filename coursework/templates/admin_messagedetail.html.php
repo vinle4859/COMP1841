@@ -1,3 +1,4 @@
+<p><a href="messages.php">&larr; Back to Messages</a></p>
 <h2>Message #<?= (int)$message['message_id'] ?></h2>
 <p><strong>From:</strong> <?=htmlspecialchars($message['username'] ?? '', ENT_QUOTES, 'UTF-8')?><?php if (!empty($message['email'])): ?> (<?=htmlspecialchars($message['email'], ENT_QUOTES, 'UTF-8')?>)<?php endif; ?></p>
 <p><strong>Email:</strong> <?=htmlspecialchars($message['email'] ?? '', ENT_QUOTES, 'UTF-8')?></p>

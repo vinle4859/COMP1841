@@ -3,17 +3,11 @@
 include '../includes/DatabaseConnection.php';
 include '../includes/DatabaseFunctions.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
-    $id = (int)$_POST['delete_user_id'];
-    if ($id > 0) {
-        deleteUser($pdo, $id);
-        header('Location: users.php');
-        exit;
-    }
-}
-
-$users = selectAll($pdo, 'user_account');
+// Users listing controller (delete moved to `deleteuser.php`)
+// Include deleted users to show full list with status
+$users = selectAll($pdo, 'user_account', true);
 $title = 'Admin - Users';
+$activePage = 'users';
 ob_start();
 include '../templates/admin_users.html.php';
 $output = ob_get_clean();

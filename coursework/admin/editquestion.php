@@ -1,45 +1,72 @@
 <?php
 include '../includes/DatabaseConnection.php';
 include '../includes/DatabaseFunctions.php';
+include '../includes/InputHelpers.php';
+
+$error = null;
 try {
-    if(isset($_POST['content'])){
-        // $sql = 'UPDATE question SET content = :content WHERE question_id = :id';
-        // $stmt = $pdo->prepare($sql);
-        // $stmt->bindValue(':content', $_POST['content']);
-        // $stmt->bindValue(':id', $_POST['question_id']);
-        // $stmt->bindValue(':id', $_POST['title']);
-        // $stmt->execute();
-        if(!empty($_POST['image'])) {
-            updateQuestion($pdo, $_POST['question_id'], $_POST['content'], 
-            $_POST['title'], $_POST['image'], $_POST['user'], 
-            $_POST['module']);
-        } else {
-            $question = getQuestion($pdo, $_POST['question_id']);
-            updateQuestion($pdo, $_POST['question_id'], $_POST['content'], 
-            $_POST['title'], $question['image'], $_POST['user'], 
-            $_POST['module']);
-        }
-
-        header('location: questions.php');
-    }else{
-        // $sql = 'SELECT * FROM question WHERE question_id = :id';
-        // $stmt = $pdo->prepare($sql);
-        // $stmt->bindValue(':id', $_GET['id']);
-        // $stmt->execute();
-        // $question = $stmt->fetch();
-        $question = getQuestion($pdo, $_GET['id']);
-        $current_user = getUser($pdo, $question['user_id']);
-        $current_module = getModule($pdo, $question['module_id']);
-        $title = 'Edit question';
-        $users = selectAll($pdo, "user_account");
-        $modules = selectAll($pdo, "module");
-
-        ob_start();
-        include '../templates/editquestion.html.php';
-        $output = ob_get_clean();
+    // Get question ID from POST or GET
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $question_id = (int) post_or_redirect('question_id', 'questions.php');
+    } else {
+        $question_id = (int) get_or_redirect('id', 'questions.php');
     }
-} catch(PDOException $e){
+    // Load existing question
+    $question = getQuestion($pdo, $question_id);
+
+    // Get other question fields for POST processing
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $content = trim($_POST['content'] ?? '');
+        $title = trim($_POST['title'] ?? '');
+        $user = trim($_POST['user'] ?? '');
+        $module = trim($_POST['module'] ?? '');
+        
+        // Handle image upload
+        $uploadResult = handleImageUpload('image', '../images/');
+        
+        if (!$uploadResult['success']) {
+            $error = 'Image upload failed: ' . $uploadResult['error'];
+            // preserve submitted values
+            $question['title'] = $title;
+            $question['content'] = $content;
+            $question['user_id'] = $user;
+            $question['module_id'] = $module;
+        } else {
+            // Determine final image: new upload, or keep existing
+            $final_image = $uploadResult['filename'] ?? $question['image'];
+            
+            // VALIDATION: require title, content, user and module
+            if ($title === '' || $content === '' || $user === '' || $module === '') {
+                $error = 'Please provide title, content, user and module.';
+                // preserve submitted values into $question so template shows them
+                $question['title'] = $title;
+                $question['content'] = $content;
+                $question['user_id'] = $user;
+                $question['module_id'] = $module;
+            } else {
+                updateQuestion($pdo, $question_id, $content, $title, $final_image, $user, $module);
+                header('Location: questions.php');
+                exit;
+            }
+        }
+    }
+
+    // Render form for viewing
+    $title = 'Edit question';
+    // Include deleted users/modules so current selection is visible even if deleted
+    $users = selectAll($pdo, 'user_account', true);  // true = include deleted
+    $modules = selectAll($pdo, 'module', true);      // true = include deleted
+    $current_user = getUser($pdo, $question['user_id']);
+    $current_module = getModule($pdo, $question['module_id']);
+
+    ob_start();
+    include '../templates/editquestion.html.php';
+    $output = ob_get_clean();
+
+} catch (PDOException $e) {
     $title = 'Error has occured';
-    $output = 'Error editing question: ' . $e->getMessage();
+    $output = 'A database error occurred: ' . $e->getMessage();
 }
+
 include '../templates/admin_layout.html.php';
+?>

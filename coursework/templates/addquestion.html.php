@@ -1,9 +1,11 @@
+<p><a href="questions.php" class="btn-secondary">&larr; Back to Questions</a></p>
+
 <?php if (!empty($error)): ?>
     <div class="errors"><?=htmlspecialchars($error, ENT_QUOTES, 'UTF-8')?></div>
 <?php endif; ?>
 <?php /* success is not shown here because the controller redirects to the questions list on success */ ?>
 
-<form action="" method="post" class="needs-validation" novalidate>
+<form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     <label for="title">Write Your Title:</label>
     <input type="text" id="title" name="title" required maxlength="255" value="<?=htmlspecialchars($titleInput ?? '', ENT_QUOTES, 'UTF-8')?>">
 
@@ -28,8 +30,11 @@
         <?php endforeach; ?>
     </select>
     
-    <label for="image">Image (placeholder)</label>
-    <input type="text" id="image" name="image" placeholder="image-filename.jpg (optional)" value="<?=htmlspecialchars($image ?? '', ENT_QUOTES, 'UTF-8')?>">
+    <label for="image">Image (optional)</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    <small style="display: block; margin-top: 0.25rem; color: #666;">Allowed: JPG, PNG, GIF. Max size: 2MB</small>
 
-    <input type="submit" name="submit" value="Add">
+    <div class="form-actions">
+        <input type="submit" name="submit" value="Add" class="btn-primary">
+    </div>
 </form>
