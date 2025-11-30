@@ -42,7 +42,7 @@ function handleImageUpload($fieldName, $prefix = 'img_') {
     // Check for upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
         return ['success' => false, 'filename' => null, 'error' => 'File could not be uploaded.'];
-    
+    }
     
     // Check file size (2MB limit)
     if ($file['size'] > $maxSize) {

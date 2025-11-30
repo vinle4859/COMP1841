@@ -49,7 +49,7 @@
         </div>
 
         <footer>
-            &copy; IJDB2023
+            &copy; 2025 UOG Student Forum. All rights reserved.
         </footer>
 
         <script>
