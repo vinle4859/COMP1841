@@ -1,6 +1,9 @@
 <?php
 // Admin modules list - display only, form posts to addmodule.php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 

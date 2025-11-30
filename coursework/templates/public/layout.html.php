@@ -4,20 +4,41 @@
         <title><?=$title?></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/COMP1841/coursework/templates/css/questions.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/templates/css/questions.css" rel="stylesheet">
     </head>
     <body>
-        <header><h1>Student Forum</h1></header>
+        <header>
+            <div class="header-container">
+                <div class="header-spacer"></div>
+                <h1>Student Forum</h1>
+                <div class="header-auth">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="<?= BASE_URL ?>/profile.php" class="profile-link">Hi, <?= htmlspecialchars($_SESSION['username'] ?? 'User', ENT_QUOTES, 'UTF-8') ?></a>
+                        <a href="<?= BASE_URL ?>/auth/logout.php" class="btn-auth">Logout</a>
+                    <?php else: ?>
+                        <a href="<?= BASE_URL ?>/auth/login.php" class="btn-auth">Login</a>
+                        <a href="<?= BASE_URL ?>/auth/signup.php" class="btn-auth btn-signup">Sign Up</a></a></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </header>
         <nav>
             <ul>
-                <li><a href="index.php" <?= (isset($activePage) && $activePage === 'home') ? 'class="active"' : '' ?>>Home</a></li>
-                <li><a href="questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Question List</a></li>
-                <li><a href="addquestion.php" <?= (isset($activePage) && $activePage === 'addquestion') ? 'class="active"' : '' ?>>Add question</a></li>
-                <li><a href="contact.php" <?= (isset($activePage) && $activePage === 'contact') ? 'class="active"' : '' ?>>Contact us</a></li>
-                <li><a href="admin/questions.php">Admin</a></li>
+                <li><a href="<?= BASE_URL ?>/index.php" <?= (isset($activePage) && $activePage === 'home') ? 'class="active"' : '' ?>>Home</a></li>
+                <li><a href="<?= BASE_URL ?>/questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Questions</a></li>
+                <li><a href="<?= BASE_URL ?>/addquestion.php" <?= (isset($activePage) && $activePage === 'addquestion') ? 'class="active"' : '' ?>>Ask Question</a></li>
+                <li><a href="<?= BASE_URL ?>/contact.php" <?= (isset($activePage) && $activePage === 'contact') ? 'class="active"' : '' ?>>Contact</a></li>
+                <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                    <li><a href="<?= BASE_URL ?>/admin/questions.php">Admin</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
         <main>
+            <?php $flash = getFlashMessage(); if ($flash): ?>
+            <div class="flash-message flash-<?= htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8') ?>">
+                <?= htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
+            <?php endif; ?>
             <?=$output?>
         </main>
         <footer>

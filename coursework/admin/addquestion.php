@@ -1,12 +1,20 @@
 <?php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
 include INCLUDES_PATH . 'InputHelpers.php';
 
+$error = null;
+
+// Handle POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
+    if (!validateCsrfToken()) {
+        $error = 'Invalid security token. Please try again.';
+    } else {
         $content = trim($_POST['content'] ?? '');
         $titleInput = trim($_POST['title'] ?? '');
         $user = trim($_POST['user'] ?? '');
@@ -14,43 +22,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($content === '' || $titleInput === '' || $module === '') {
             $error = 'Please enter the question title, content, and select a module.';
-            $title = 'Add new question';
-            $users = selectAll($pdo, "user_account");
-            $modules = selectAll($pdo, "module");
-            ob_start();
-            include PUBLIC_TEMPLATES . 'addquestion.html.php';
-            $output = ob_get_clean();
         } else {
-            $imageFilename = null;
-            $uploadResult = handleImageUpload('image', IMAGES_PATH);
+$uploadResult = handleImageUpload('image', 'question_');
             
             if (!$uploadResult['success']) {
-                $error = 'Image upload failed: ' . $uploadResult['error'];
-                $title = 'Add new question';
-                $users = selectAll($pdo, "user_account");
-                $modules = selectAll($pdo, "module");
-                ob_start();
-                include PUBLIC_TEMPLATES . 'addquestion.html.php';
-                $output = ob_get_clean();
+                $error = $uploadResult['error'];
             } else {
-                $imageFilename = $uploadResult['filename'];
-                addQuestion($pdo, $content, $imageFilename, $titleInput, $user, $module);
-                header('location: questions.php');
-                exit;
+                try {
+                    $imageFilename = $uploadResult['filename'];
+                    addQuestion($pdo, $content, $imageFilename, $titleInput, $user, $module);
+                    header('location: questions.php');
+                    exit;
+                } catch (PDOException $e) {
+                    $error = 'Database error: ' . $e->getMessage();
+                }
             }
         }
-    } catch (PDOException $e) {
-        $title = 'An error has occured';
-        $output = 'Database error: ' . $e->getMessage();
     }
-} else {
-    $title = 'Add new question';
-    $users = selectAll($pdo, "user_account");
-    $modules = selectAll($pdo, "module");
-    ob_start();
-    include PUBLIC_TEMPLATES . 'addquestion.html.php';
-    $output = ob_get_clean();
 }
 
+// Render page
+$title = 'Add new question';
+$users = selectAll($pdo, "user_account");
+$modules = selectAll($pdo, "module");
+ob_start();
+include PUBLIC_TEMPLATES . 'addquestion.html.php';
+$output = ob_get_clean();
 include ADMIN_TEMPLATES . 'layout.html.php';
-?>

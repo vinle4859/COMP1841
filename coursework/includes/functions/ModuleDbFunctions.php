@@ -8,6 +8,12 @@ function getModule($pdo, $module_id) {
     return getById($pdo, 'module', $module_id);
 }
 
+function getActiveModules($pdo) {
+    $sql = 'SELECT * FROM module WHERE status = \'active\' ORDER BY module_name ASC';
+    $query = query($pdo, $sql);
+    return $query->fetchAll();
+}
+
 function addModule($pdo, $module_name) {
     $sql = 'INSERT INTO module (module_name) VALUES (:module_name)';
     $params = [':module_name' => $module_name];

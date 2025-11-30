@@ -1,6 +1,9 @@
 <?php
 // Handler for adding modules - POST only, redirects back to modules.php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true, 'csrf' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'ModuleDbFunctions.php';

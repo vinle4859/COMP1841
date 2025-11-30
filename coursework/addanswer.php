@@ -1,10 +1,16 @@
 <?php
-// Handler for adding answers from public question detail page
-// This file only handles POST, then redirects back
+/**
+ * Handler for adding answers from public question detail page
+ * POST-only action controller - redirects back to question detail
+ */
 include 'includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
+
+// Initialize request: require login, CSRF validated automatically for POST
+initRequest(['auth' => true]);
 
 // Must have question_id
 if (!isset($_POST['question_id']) || !is_numeric($_POST['question_id'])) {
@@ -35,25 +41,13 @@ if ($userId <= 0) {
     exit;
 }
 
-// Handle image upload if provided
-$image = null;
-if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $allowed = ['image/jpeg', 'image/png', 'image/gif'];
-    $fileType = $_FILES['image']['type'];
-    
-    if (in_array($fileType, $allowed) && $_FILES['image']['size'] <= 2 * 1024 * 1024) {
-        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $newName = 'answer_' . time() . '_' . uniqid() . '.' . $ext;
-        $destination = 'images/' . $newName;
-        
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-            $image = $newName;
-        }
-    } else {
-        header('Location: ' . $redirectUrl . '&error=' . urlencode('Invalid image. Allowed: JPG, PNG, GIF. Max 2MB.'));
-        exit;
-    }
+// Handle image upload
+$upload = handleImageUpload('image', 'answer_');
+if (!$upload['success']) {
+    header('Location: ' . $redirectUrl . '&error=' . urlencode($upload['error']));
+    exit;
 }
+$image = $upload['filename'];
 
 // Add the answer
 try {

@@ -1,5 +1,8 @@
 <?php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
@@ -8,59 +11,65 @@ include FUNCTIONS_PATH . 'ModuleDbFunctions.php';
 include INCLUDES_PATH . 'InputHelpers.php';
 
 $error = null;
-try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $question_id = (int) post_or_redirect('question_id', 'questions.php');
-    } else {
-        $question_id = (int) get_or_redirect('id', 'questions.php');
-    }
-    $question = getQuestion($pdo, $question_id);
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Get question ID from POST or GET
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $question_id = (int) post_or_redirect('question_id', 'questions.php');
+} else {
+    $question_id = (int) get_or_redirect('id', 'questions.php');
+}
+
+$question = getQuestion($pdo, $question_id);
+if (!$question) {
+    header('Location: questions.php');
+    exit;
+}
+
+// Handle POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validateCsrfToken()) {
+        $error = 'Invalid security token. Please try again.';
+    } else {
         $content = trim($_POST['content'] ?? '');
-        $title = trim($_POST['title'] ?? '');
+        $titleInput = trim($_POST['title'] ?? '');
         $user = trim($_POST['user'] ?? '');
         $module = trim($_POST['module'] ?? '');
         
-        $uploadResult = handleImageUpload('image', IMAGES_PATH);
+$uploadResult = handleImageUpload('image', 'question_');
         
         if (!$uploadResult['success']) {
-            $error = 'Image upload failed: ' . $uploadResult['error'];
-            $question['title'] = $title;
+            $error = $uploadResult['error'];
+            $question['title'] = $titleInput;
+            $question['content'] = $content;
+            $question['user_id'] = $user;
+            $question['module_id'] = $module;
+        } elseif ($titleInput === '' || $content === '' || $user === '' || $module === '') {
+            $error = 'Please provide title, content, user and module.';
+            $question['title'] = $titleInput;
             $question['content'] = $content;
             $question['user_id'] = $user;
             $question['module_id'] = $module;
         } else {
-            $final_image = $uploadResult['filename'] ?? $question['image'];
-            
-            if ($title === '' || $content === '' || $user === '' || $module === '') {
-                $error = 'Please provide title, content, user and module.';
-                $question['title'] = $title;
-                $question['content'] = $content;
-                $question['user_id'] = $user;
-                $question['module_id'] = $module;
-            } else {
-                updateQuestion($pdo, $question_id, $content, $title, $final_image, $user, $module);
+            try {
+                $final_image = $uploadResult['filename'] ?? $question['image'];
+                updateQuestion($pdo, $question_id, $content, $titleInput, $final_image, $user, $module);
                 header('Location: questions.php');
                 exit;
+            } catch (PDOException $e) {
+                $error = 'Database error: ' . $e->getMessage();
             }
         }
     }
-
-    $title = 'Edit question';
-    $users = selectAll($pdo, 'user_account', true);
-    $modules = selectAll($pdo, 'module', true);
-    $current_user = getUser($pdo, $question['user_id']);
-    $current_module = getModule($pdo, $question['module_id']);
-
-    ob_start();
-    include ADMIN_TEMPLATES . 'editquestion.html.php';
-    $output = ob_get_clean();
-
-} catch (PDOException $e) {
-    $title = 'Error has occured';
-    $output = 'A database error occurred: ' . $e->getMessage();
 }
 
+// Render page
+$title = 'Edit question';
+$users = selectAll($pdo, 'user_account', true);
+$modules = selectAll($pdo, 'module', true);
+$current_user = getUser($pdo, $question['user_id']);
+$current_module = getModule($pdo, $question['module_id']);
+
+ob_start();
+include ADMIN_TEMPLATES . 'editquestion.html.php';
+$output = ob_get_clean();
 include ADMIN_TEMPLATES . 'layout.html.php';
-?>

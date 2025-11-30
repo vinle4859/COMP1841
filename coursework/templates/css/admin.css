@@ -24,6 +24,34 @@
 }
 
 /* ========================================
+   FLASH MESSAGES
+   ======================================== */
+.flash-message {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+}
+
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* ========================================
    ADMIN HEADER
    ======================================== */
 header#admin { 
@@ -31,6 +59,9 @@ header#admin {
     color: #ffffff;
     padding: 1.25rem 1.5rem;
     box-shadow: var(--shadow-medium);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header#admin h1 {
@@ -38,6 +69,32 @@ header#admin h1 {
     font-weight: 600;
     margin: 0;
     font-size: 1.5rem;
+    flex: 0 0 auto;
+}
+
+header#admin .header-auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+header#admin .user-greeting {
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+header#admin .btn-auth {
+    background-color: var(--admin-accent);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
 }
 
 /* ========================================
@@ -227,15 +284,6 @@ header#admin + .admin-container > nav {
     color: var(--admin-accent);
 }
 
-.btn-success {
-    background: var(--admin-success);
-    color: #fff;
-}
-
-.btn-success:hover {
-    background: #229954; /* 10% darker green */
-}
-
 .btn-link { 
     background: transparent;
     color: var(--admin-accent);
@@ -271,6 +319,27 @@ header#admin + .admin-container > nav {
 .admin-list-header .admin-action {
     white-space: nowrap;
     flex-shrink: 0;
+}
+
+.filter-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.btn-filter {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    background-color: var(--admin-surface);
+    border: 1px solid var(--admin-accent);
+    border-radius: 4px;
+    color: var(--admin-accent);
+    text-decoration: none;
+}
+
+.btn-filter:hover {
+    background-color: var(--admin-accent);
+    border-color: var(--admin-accent);
+    color: white;
 }
 
 /* Questions summary styling */
@@ -314,15 +383,6 @@ header#admin + .admin-container > nav {
     margin: 0;
     height: auto;
 }
-
-/* Keep module and title on a single line where possible */
-.question-header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    margin: 0 0 0.5rem 0;
-}
-.question-header a { color: inherit; font-weight: 700; text-decoration: none; }
 
 /* ========================================
    TABLES
@@ -429,6 +489,17 @@ form {
     max-width: 600px;
 }
 
+/* Inline forms should not have card styling */
+form.inline-form,
+form.confirm-delete {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: none;
+    display: inline-block;
+}
+
 label {
     display: block;
     margin-bottom: 0.5rem;
@@ -526,45 +597,53 @@ form p:last-of-type {
 }
 
 /* ========================================
-   ADMIN FILTER FORM
+   ADMIN HEADER CONTAINER
    ======================================== */
-.admin-filters {
+header#admin {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin: 0 0 1.5rem 0;
+    justify-content: space-between;
+}
+
+/* ========================================
+   ADMIN FILTER FORM - HORIZONTAL LAYOUT
+   ======================================== */ */
+.admin-filters-horizontal {
+    margin-bottom: 1.5rem;
     padding: 1rem;
     background-color: var(--admin-bg);
     border-radius: var(--border-radius);
+}
+
+.admin-filters-horizontal .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
-.admin-filters input[type="text"] {
-    min-width: 200px;
-    margin: 0;
+.admin-filters-horizontal input[type="text"],
+.admin-filters-horizontal select {
     padding: 0.5rem 0.75rem;
-    background-color: #fff;
     border: 1px solid var(--admin-border);
-}
-
-.admin-filters select {
-    min-width: 150px;
-    margin: 0;
-    padding: 0.5rem 0.75rem;
-    height: auto;
-    background-color: #fff;
-    color: var(--admin-text);
-    border: 1px solid var(--admin-border);
+    border-radius: 4px;
     font-size: 0.9rem;
+    background-color: #fff;
+    min-width: 180px;
 }
 
-.admin-filters .admin-action {
-    margin: 0;
+.admin-filters-horizontal .admin-action {
     padding: 0.5rem 1rem;
 }
 
-.admin-filters .btn-link {
+.admin-filters-horizontal .btn-link {
     padding: 0.5rem;
+    color: var(--admin-accent);
+    text-decoration: none;
+}
+
+.admin-filters-horizontal .btn-link:hover {
+    text-decoration: underline;
 }
 
 /* ========================================
@@ -617,12 +696,6 @@ form p:last-of-type {
     border: 1px solid #F57C00;
 }
 
-.status-resolved {
-    background-color: #E8F5E9;
-    color: var(--admin-success);
-    border: 1px solid var(--admin-success);
-}
-
 /* ========================================
    MESSAGE DETAIL - SIMPLE HORIZONTAL LAYOUT
    ======================================== */
@@ -644,31 +717,6 @@ form p:last-of-type {
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
-}
-
-.inline-status-form {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    border: none;
-    box-shadow: none;
-}
-
-.inline-status-form label {
-    margin: 0;
-    font-weight: 600;
-}
-
-.inline-status-form select {
-    margin: 0;
-    width: auto;
-    min-width: 120px;
-    background-color: #fff;
-    border: 1px solid var(--admin-border);
-    box-shadow: none;
 }
 
 .message-detail-body {
@@ -728,3 +776,46 @@ form p:last-of-type {
     font-style: italic;
     color: var(--admin-danger);
 }
+
+/* ========================================
+   EMPTY STATE BOX
+   ======================================== */
+.empty-state-box {
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: var(--admin-bg);
+    border-radius: var(--border-radius);
+    color: var(--admin-text-light);
+    margin: 1rem 0;
+}
+
+.empty-state-box p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* ========================================
+   UNREAD MESSAGE STYLING
+   ======================================== */
+.row-unread {
+    font-weight: 600;
+    background-color: #FFF8E1;
+}
+
+.row-unread:hover {
+    background-color: #FFECB3;
+}
+
+/* Unread badge in nav */
+.badge-unread {
+    display: inline-block;
+    background-color: #E74C3C;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+    margin-left: 0.25rem;
+    vertical-align: middle;
+}
+

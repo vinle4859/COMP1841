@@ -1,27 +1,36 @@
 <?php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'UserDbFunctions.php';
 include INCLUDES_PATH . 'InputHelpers.php';
 
 $error = null;
-try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $user_id = (int) post_or_redirect('user_id', 'users.php');
+
+// Get user ID from POST or GET
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = (int) post_or_redirect('user_id', 'users.php');
+} else {
+    $user_id = (int) get_or_redirect('id', 'users.php');
+}
+
+$user = getUser($pdo, $user_id);
+if (!$user) {
+    header('Location: users.php');
+    exit;
+}
+
+// Handle POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validateCsrfToken()) {
+        $error = 'Invalid security token. Please try again.';
     } else {
-        $user_id = (int) get_or_redirect('id', 'users.php');
-    }
-
-    $user = getUser($pdo, $user_id);
-    if (!$user) {
-        header('Location: users.php');
-        exit;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');
+        
         if ($username === '' || $email === '') {
             $error = 'Please enter a username and email address.';
             $user['username'] = $username;
@@ -31,20 +40,20 @@ try {
             $user['username'] = $username;
             $user['email'] = $email;
         } else {
-            updateUser($pdo, $user_id, $username, $email);
-            header('Location: users.php');
-            exit;
+            try {
+                updateUser($pdo, $user_id, $username, $email);
+                header('Location: users.php');
+                exit;
+            } catch (PDOException $e) {
+                $error = 'Database error: ' . $e->getMessage();
+            }
         }
     }
-
-    $title = 'Edit user';
-    ob_start();
-    include ADMIN_TEMPLATES . 'edituser.html.php';
-    $output = ob_get_clean();
-
-} catch (PDOException $e) {
-    $title = 'Error has occured';
-    $output = 'Database error: ' . $e->getMessage();
 }
 
+// Render page
+$title = 'Edit user';
+ob_start();
+include ADMIN_TEMPLATES . 'edituser.html.php';
+$output = ob_get_clean();
 include ADMIN_TEMPLATES . 'layout.html.php';

@@ -1,11 +1,18 @@
 <?php
 // Admin inbox
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'MessageDbFunctions.php';
 
-$messages = getMessageList($pdo);
+// Filter by unread if requested
+$showUnreadOnly = isset($_GET['unread']) && $_GET['unread'] === '1';
+$messages = getMessageList($pdo, $showUnreadOnly ? 'new' : null);
+$totalUnreadCount = getUnreadMessageCount($pdo);
+
 $title = 'Admin Inbox';
 $activePage = 'messages';
 ob_start();

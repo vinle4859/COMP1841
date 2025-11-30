@@ -8,7 +8,7 @@ function getQuestion($pdo, $question_id) {
     return getById($pdo, 'question', $question_id);
 }
 
-function getQuestionList($pdo, $module_id = null, $user_id = null, $publicView = false, $searchTerm = null) {
+function getQuestionList($pdo, $module_id = null, $user_id = null, $publicView = false, $searchTerm = null, $authorSearch = null) {
     if ($publicView) {
         $sql = 'SELECT q.question_id, q.title, q.content, q.image, q.created_at, q.view_count,
                 u.email, 
@@ -43,6 +43,10 @@ function getQuestionList($pdo, $module_id = null, $user_id = null, $publicView =
     if ($searchTerm !== null && $searchTerm !== '') {
         $conditions[] = '(q.title LIKE :search OR q.content LIKE :search)';
         $params[':search'] = '%' . $searchTerm . '%';
+    }
+    if ($authorSearch !== null && $authorSearch !== '') {
+        $conditions[] = 'u.username LIKE :author';
+        $params[':author'] = '%' . $authorSearch . '%';
     }
     
     if (!empty($conditions)) {
@@ -79,21 +83,21 @@ function getQuestionDetail($pdo, $question_id, $publicView = false) {
 
     // Get answers with the same view logic
     if ($publicView) {
-        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, 
+        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, a.user_id, a.is_accepted,
                 CASE WHEN ua.status = \'deleted\' THEN \'[Deleted]\' ELSE ua.username END as username, 
                 ua.email, ua.status as user_status
                 FROM answer a
                 INNER JOIN user_account ua ON a.user_id = ua.user_id
                 WHERE a.question_id = :id
-                ORDER BY a.created_at ASC';
+                ORDER BY a.is_accepted DESC, a.created_at ASC';
     } else {
-        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, 
+        $sql = 'SELECT a.answer_id, a.content, a.image, a.created_at, a.user_id, a.is_accepted,
                 CASE WHEN ua.status = \'deleted\' THEN CONCAT(ua.username, \' [Deleted]\') ELSE ua.username END as username, 
                 ua.email, ua.status as user_status
                 FROM answer a
                 INNER JOIN user_account ua ON a.user_id = ua.user_id
                 WHERE a.question_id = :id
-                ORDER BY a.created_at ASC';
+                ORDER BY a.is_accepted DESC, a.created_at ASC';
     }
     $answersQuery = query($pdo, $sql, [':id' => $question_id]);
     $answers = $answersQuery->fetchAll();

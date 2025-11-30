@@ -1,5 +1,8 @@
 <?php
 include 'includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(); // Track last_page for redirect after login
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
@@ -13,13 +16,20 @@ $answerSuccess = $_GET['success'] ?? '';
 try {
     $id = get_or_redirect('id', 'questions.php');
     
+    // Track view count (once per session per question)
+    $viewedKey = 'viewed_questions';
+    if (!isset($_SESSION[$viewedKey])) {
+        $_SESSION[$viewedKey] = [];
+    }
+    if (!in_array($id, $_SESSION[$viewedKey])) {
+        incrementViewCount($pdo, $id);
+        $_SESSION[$viewedKey][] = $id;
+    }
+    
     // Use DatabaseFunctions helper to load question and answers (public view)
     $detail = getQuestionDetail($pdo, $id, true);
     $question = $detail['question'];
     $answers = $detail['answers'];
-    
-    // Get active users list for answer dropdown
-    $users = selectAll($pdo, 'user_account');
 
     // Render the detail template into $output so layout can place it in the page
     // Set a sensible page title first (explicit if/else for clarity)

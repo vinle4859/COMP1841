@@ -1,6 +1,9 @@
 <?php
 // Admin: Edit an existing answer
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
@@ -18,44 +21,40 @@ if (!$answer) {
 
 $question = getQuestion($pdo, $answer['question_id']);
 
+// Handle POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $content = trim($_POST['content'] ?? '');
-    
-    if ($content === '') {
-        $error = 'Answer content is required.';
+    if (!validateCsrfToken()) {
+        $error = 'Invalid security token. Please try again.';
     } else {
-        $image = $answer['image'];
+        $content = trim($_POST['content'] ?? '');
         
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $allowed = ['image/jpeg', 'image/png', 'image/gif'];
-            $fileType = $_FILES['image']['type'];
+        if ($content === '') {
+            $error = 'Answer content is required.';
+        } else {
+            $image = $answer['image'];
             
-            if (in_array($fileType, $allowed) && $_FILES['image']['size'] <= 2 * 1024 * 1024) {
-                $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-                $newName = 'answer_' . time() . '_' . uniqid() . '.' . $ext;
-                $destination = IMAGES_PATH . $newName;
-                
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-                    $image = $newName;
-                }
-            } else {
-                $error = 'Invalid image. Allowed: JPG, PNG, GIF. Max 2MB.';
+            // Handle image upload
+            $upload = handleImageUpload('image', 'answer_');
+            if (!$upload['success']) {
+                $error = $upload['error'];
+            } elseif ($upload['filename']) {
+                $image = $upload['filename'];
             }
-        }
-        
-        if (!$error) {
-            updateAnswer($pdo, $answer_id, $content, $image);
-            header('Location: questiondetail.php?id=' . $answer['question_id']);
-            exit;
+            
+            if (!$error) {
+                updateAnswer($pdo, $answer_id, $content, $image);
+                header('Location: questiondetail.php?id=' . $answer['question_id']);
+                exit;
+            }
         }
     }
 } else {
     $content = $answer['content'];
 }
 
+// Render page
 $title = 'Edit Answer';
 $activePage = 'questions';
-
 ob_start();
 include ADMIN_TEMPLATES . 'editanswer.html.php';
 $output = ob_get_clean();

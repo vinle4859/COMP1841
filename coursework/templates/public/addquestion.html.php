@@ -6,6 +6,7 @@
 <?php /* success is not shown here because the controller redirects to the questions list on success */ ?>
 
 <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <?= csrfField() ?>
     <label for="title">Write Your Title:</label>
     <input type="text" id="title" name="title" required maxlength="255" value="<?=htmlspecialchars($titleInput ?? '', ENT_QUOTES, 'UTF-8')?>">
 
@@ -21,14 +22,9 @@
         <?php endforeach; ?>
     </select>
 
-    <label for="user">Author</label>
-    <select id="user" name="user" required>
-        <option value="">Select a user</option>
-        <?php foreach($users as $u): ?>
-            <option value="<?=htmlspecialchars($u['user_id'], ENT_QUOTES, 'UTF-8')?>" <?= (isset($user) && ((string)$user === (string)$u['user_id']) ? 'selected' : '')?> >
-            <?=htmlspecialchars($u['username'], ENT_QUOTES, 'UTF-8')?></option>
-        <?php endforeach; ?>
-    </select>
+    <!-- User is automatically set from session -->
+    <input type="hidden" name="user" value="<?= htmlspecialchars($_SESSION['user_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+    <p class="form-note">Posting as: <strong><?= htmlspecialchars($_SESSION['username'] ?? 'Unknown', ENT_QUOTES, 'UTF-8') ?></strong></p>
     
     <label for="image">Image (optional)</label>
     <input type="file" id="image" name="image" accept="image/*">

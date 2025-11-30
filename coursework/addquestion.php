@@ -1,64 +1,53 @@
 <?php
+/**
+ * Add Question Page
+ * Allows authenticated users to post new questions.
+ */
 include 'includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
 include INCLUDES_PATH . 'InputHelpers.php';
 
-if (isset($_POST['content'])) {
+// Initialize request: require login, CSRF validated automatically for POST
+initRequest(['auth' => true]);
+
+$error = null;
+
+// Handle POST submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Read and trim inputs directly
         $content = trim($_POST['content'] ?? '');
         $titleInput = trim($_POST['title'] ?? '');
-        // user and module are selections submitted as strings; read trimmed values
-        $user = trim($_POST['user'] ?? '');
+        $user = getCurrentUserId();
         $module = trim($_POST['module'] ?? '');
 
-        // Validate required fields FIRST
         if ($content === '' || $titleInput === '' || $module === '') {
-            $title = 'Add new question';
-            $activePage = 'addquestion';
             $error = 'Please provide a title, content and select a module.';
-            $users = selectAll($pdo, "user_account");
-            $modules = selectAll($pdo, "module");
-            ob_start();
-            include PUBLIC_TEMPLATES . 'addquestion.html.php';
-            $output = ob_get_clean();
         } else {
-            // Handle optional image upload
-            $imageFilename = null;
-            $uploadResult = handleImageUpload('image', 'images/');
+            $uploadResult = handleImageUpload('image', 'question_');
             
             if (!$uploadResult['success']) {
-                // Image upload failed (but image is optional, so show error but allow retry)
-                $error = 'Image upload failed: ' . $uploadResult['error'];
-                $title = 'Add new question';
-                $activePage = 'addquestion';
-                $users = selectAll($pdo, "user_account");
-                $modules = selectAll($pdo, "module");
-                ob_start();
-                include PUBLIC_TEMPLATES . 'addquestion.html.php';
-                $output = ob_get_clean();
+                $error = $uploadResult['error'];
             } else {
-                // Success - image uploaded or no image provided
-                $imageFilename = $uploadResult['filename'];
-                addQuestion($pdo, $content, $imageFilename, $titleInput, $user, $module);
-                header('location: questions.php');
+                // Success - redirect and exit
+                addQuestion($pdo, $content, $uploadResult['filename'], $titleInput, $user, $module);
+                header('Location: questions.php');
                 exit;
             }
         }
     } catch (PDOException $e) {
-        $title = 'An error has occured';
-        $output = 'Database error: ' . $e->getMessage();
+        $error = 'Database error: ' . $e->getMessage();
     }
-} else {
-    $title = 'Add new question';
-    $activePage = 'addquestion';
-    $users = selectAll($pdo, "user_account");
-    $modules = selectAll($pdo, "module");
-    ob_start();
-    include PUBLIC_TEMPLATES . 'addquestion.html.php';
-    $output = ob_get_clean();
 }
+
+// Render page (for GET or failed POST)
+$title = 'Add new question';
+$activePage = 'addquestion';
+$modules = selectAll($pdo, "module");
+
+ob_start();
+include PUBLIC_TEMPLATES . 'addquestion.html.php';
+$output = ob_get_clean();
 include PUBLIC_TEMPLATES . 'layout.html.php';
-?>

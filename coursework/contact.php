@@ -1,15 +1,28 @@
 <?php
 include 'includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['csrf' => false]); // Manual CSRF for friendly error
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'MessageDbFunctions.php';
 include INCLUDES_PATH . 'InputHelpers.php';
 
-// Initialize form variables to avoid undefined variable notices in the template
+// Initialize form variables
 $name = $email = $subject = $body = '';
 $error = $success = '';
+
+// Pre-fill from session if logged in
+if (isLoggedIn()) {
+    $name = $_SESSION['username'] ?? '';
+    $email = $_SESSION['email'] ?? '';
+}
+
+// Handle POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
+    if (!validateCsrfToken()) {
+        $error = 'Invalid security token. Please try again.';
+    } else {
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $subject = trim($_POST['subject'] ?? '');
@@ -18,18 +31,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($name === '' || $email === '' || $subject === '' || $body === '') {
             $error = 'Please fill all required fields.';
         } else {
-            // no authentication, guest submission — store sender_name/sender_email
-            $user_id = null;    
-            addMessage($pdo, $subject, $body, $name, $email, $user_id);
-            $name = $email = $subject = $body = '';
-            $success = 'Your message has been sent successfully.';
+            try {
+                $user_id = getCurrentUserId();
+                addMessage($pdo, $subject, $body, $name, $email, $user_id);
+                
+                // Reset form and show success
+                $name = $email = $subject = $body = '';
+                if (isLoggedIn()) {
+                    $name = $_SESSION['username'] ?? '';
+                    $email = $_SESSION['email'] ?? '';
+                }
+                $success = 'Your message has been sent successfully.';
+            } catch (PDOException $e) {
+                $error = 'Database error: ' . $e->getMessage();
+            }
         }
-    } catch (PDOException $e) {
-        $title = 'An error has occured';
-        $output = 'Database error: ' . $e->getMessage();
     }
 }
 
+// Render page
 $title = 'Contact';
 $activePage = 'contact';
 ob_start();

@@ -1,11 +1,27 @@
 <?php
 // Admin users list
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
+include FUNCTIONS_PATH . 'UserDbFunctions.php';
 
-// Include deleted users to show full list with status
-$users = selectAll($pdo, 'user_account', true);
+// Get search parameter (minimum 2 characters)
+$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : null;
+
+if ($searchTerm && strlen($searchTerm) < 2) {
+    $searchTerm = null;
+}
+
+if ($searchTerm) {
+    $users = searchUsers($pdo, $searchTerm);
+} else {
+    // Include deleted users to show full list with status
+    $users = selectAll($pdo, 'user_account', true);
+}
+
 $title = 'Admin - Users';
 $activePage = 'users';
 ob_start();

@@ -12,6 +12,7 @@
 <?php endif; ?>
 
 <form method="post" enctype="multipart/form-data">
+    <?= csrfField() ?>
     <p>
         <label for="content">Answer Content:</label>
         <textarea name="content" id="content" rows="6" required><?=htmlspecialchars($content, ENT_QUOTES, 'UTF-8')?></textarea>

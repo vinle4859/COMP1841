@@ -7,6 +7,7 @@
 <?php endif; ?>
 
 <form method="post" class="needs-validation">
+    <?= csrfField() ?>
     <p>
         <label for="username">Username</label>
         <input id="username" name="username" required maxlength="255" value="<?=htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8')?>">

@@ -1,5 +1,6 @@
 <p><a href="questions.php">&larr; Back to Questions</a></p>
 <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <?= csrfField() ?>
     <input type="hidden" name="question_id" value="<?=htmlspecialchars($question['question_id'], ENT_QUOTES, 'UTF-8')?>">
     <!-- Edit Title -->
     <label for="title">Edit your question title:</label>

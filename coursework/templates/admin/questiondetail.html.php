@@ -1,9 +1,21 @@
 <a href="questions.php">&larr; Back to Questions</a>
 
 <blockquote class="question-detail">
-    <h3><?=htmlspecialchars($question['module_name'], ENT_QUOTES, 'UTF-8')?> - <?=htmlspecialchars(date('d/m/Y H:i', strtotime($question['created_at'])), ENT_QUOTES, 'UTF-8')?></h3>
-    <p><a href="mailto:<?=htmlspecialchars($question['email'], ENT_QUOTES, 'UTF-8')?>">
-        <?=htmlspecialchars($question['username'], ENT_QUOTES, 'UTF-8')?></a></p>
+    <div class="question-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h3><?=htmlspecialchars($question['module_name'], ENT_QUOTES, 'UTF-8')?> - <?=htmlspecialchars(date('d/m/Y H:i', strtotime($question['created_at'])), ENT_QUOTES, 'UTF-8')?></h3>
+            <p><a href="mailto:<?=htmlspecialchars($question['email'], ENT_QUOTES, 'UTF-8')?>">
+                <?=htmlspecialchars($question['username'], ENT_QUOTES, 'UTF-8')?></a></p>
+        </div>
+        <div class="actions">
+            <a href="editquestion.php?id=<?=$question['question_id']?>" class="btn-link">Edit</a>
+            <form action="deletequestion.php" method="post" class="inline-form confirm-delete">
+                <?= csrfField() ?>
+                <input type="hidden" name="question_id" value="<?=$question['question_id']?>">
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+    </div>
     
     <h2><?=htmlspecialchars($question['title'], ENT_QUOTES, 'UTF-8')?></h2>
     <p><?=htmlspecialchars($question['content'], ENT_QUOTES, 'UTF-8')?></p>
@@ -25,16 +37,8 @@
     <?php endif; ?>
 
     <form action="addanswer.php" method="post" enctype="multipart/form-data">
+        <?= csrfField() ?>
         <input type="hidden" name="question_id" value="<?=$question['question_id']?>">
-        <p>
-            <label for="user_id">Post as:</label>
-            <select name="user_id" id="user_id" required>
-                <option value="">-- Select user --</option>
-                <?php foreach ($users as $user): ?>
-                    <option value="<?=$user['user_id']?>"><?=htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8')?></option>
-                <?php endforeach; ?>
-            </select>
-        </p>
         <p>
             <label for="answer_content">Answer:</label>
             <textarea name="answer_content" id="answer_content" rows="4" required placeholder="Write your answer here..."><?=htmlspecialchars($answerContent ?? '', ENT_QUOTES, 'UTF-8')?></textarea>
@@ -64,6 +68,7 @@
             <div class="actions" style="margin-top: 0.5rem;">
                 <a href="editanswer.php?id=<?=$answer['answer_id']?>" class="btn-link">Edit</a>
                 <form action="deleteanswer.php" method="post" class="confirm-delete">
+                    <?= csrfField() ?>
                     <input type="hidden" name="answer_id" value="<?=$answer['answer_id']?>">
                     <input type="hidden" name="question_id" value="<?=$question['question_id']?>">
                     <input type="submit" value="Delete">

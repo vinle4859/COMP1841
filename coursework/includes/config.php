@@ -23,3 +23,6 @@ define('ADMIN_TEMPLATES', TEMPLATES_PATH . 'admin' . DIRECTORY_SEPARATOR);
 
 // Image upload path
 define('IMAGES_PATH', ROOT_PATH . 'images' . DIRECTORY_SEPARATOR);
+
+// Web URL base path (for redirects and links)
+define('BASE_URL', '/COMP1841/coursework');

@@ -7,6 +7,7 @@
 
 <?php if ($user): ?>
     <form method="post" class="needs-validation">
+        <?= csrfField() ?>
         <input type="hidden" name="user_id" value="<?=htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8')?>">
         <p>
             <label for="username">Username</label>

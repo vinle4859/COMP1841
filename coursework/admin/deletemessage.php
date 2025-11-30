@@ -1,5 +1,8 @@
 <?php
 include '../includes/config.php';
+include FUNCTIONS_PATH . 'SessionFunctions.php';
+initRequest(['admin' => true, 'csrf' => true]);
+
 include INCLUDES_PATH . 'DatabaseConnection.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'MessageDbFunctions.php';
@@ -13,9 +16,5 @@ try {
 } catch (PDOException $e) {
     $title = "An error has occured";
     $output = 'Database error: ' . $e->getMessage();
-}
-
-if (!empty($output)) {
     include ADMIN_TEMPLATES . 'layout.html.php';
 }
-?>

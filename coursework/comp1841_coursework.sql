@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2025 at 12:11 PM
+-- Generation Time: Nov 29, 2025 at 10:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,7 +74,8 @@ INSERT INTO `answer` (`answer_id`, `content`, `is_accepted`, `image`, `status`, 
 (29, 'Python is generally preferred if you want to be a well-rounded data scientist who also needs to build applications, integrate with web servers, or do general-purpose programming. It has great libraries like Pandas, Scikit-learn, and TensorFlow.', 0, NULL, 'active', '2025-10-31 03:00:00', 10, 13),
 (30, 'R is fantastic for pure statistical analysis and visualization. It was built by statisticians *for* statisticians. Its libraries (like `ggplot2` and the `tidyverse`) are incredibly powerful for data exploration and academic research.', 0, NULL, 'active', '2025-10-31 03:05:00', 6, 13),
 (31, 'Honestly, you can\'t go wrong. Python is more versatile (general-purpose), R is more specialized (statistics). Many data scientists know both. I\'d start with Python as it\'s easier to branch out from there.', 0, NULL, 'active', '2025-10-31 04:00:00', 3, 13),
-(32, 'Python has a gentler learning curve for people new to programming. R\'s syntax can be a bit quirky at first, but it\'s very powerful once you get it.', 0, NULL, 'active', '2025-11-01 02:00:00', 9, 13);
+(32, 'Python has a gentler learning curve for people new to programming. R\'s syntax can be a bit quirky at first, but it\'s very powerful once you get it.', 0, NULL, 'active', '2025-11-01 02:00:00', 9, 13),
+(33, 'I don\'t think this is an appropriate question on this forum.', 0, NULL, 'active', '2025-11-29 18:33:09', 2, 10);
 
 -- --------------------------------------------------------
 
@@ -104,6 +105,18 @@ CREATE TABLE `message` (
   `sender_email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `message`
+--
+
+INSERT INTO `message` (`message_id`, `user_id`, `subject`, `content`, `status`, `created_at`, `sender_name`, `sender_email`) VALUES
+(1, NULL, 'Suggestion', 'This website sucks. Pls fix!', 'new', '2025-11-14 06:45:20', 'vinh', 'vinh213@gmail.com'),
+(2, NULL, 'Improvement', 'Can we have a login feature?', 'new', '2025-11-14 08:11:36', 'levinh', 'levinh392@gmail.com'),
+(3, NULL, 'Module name', 'There is a typo in the Programing module name.', 'new', '2025-11-14 08:27:43', 'Vinhle', 'vinhle9442@gmail.com'),
+(4, NULL, 'test1', 'just testing1', 'new', '2025-11-14 08:40:06', 'tester1', 'tester1@gmail.com'),
+(8, NULL, 'fjsdif', 'fdsifdwwe', 'new', '2025-11-14 09:09:24', 'ddasd', 'dsada@gmail.com'),
+(9, NULL, 'fjsdif', 'fdsifdwwe', 'new', '2025-11-14 09:09:30', 'ddasd', 'dsada@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -112,18 +125,19 @@ CREATE TABLE `message` (
 
 CREATE TABLE `module` (
   `module_id` int(11) NOT NULL,
-  `module_name` varchar(255) NOT NULL
+  `module_name` varchar(255) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `module`
 --
 
-INSERT INTO `module` (`module_id`, `module_name`) VALUES
-(1, 'Web Programming'),
-(2, 'Software Engineering'),
-(3, 'Machine Learning'),
-(4, 'Data Science');
+INSERT INTO `module` (`module_id`, `module_name`, `status`) VALUES
+(1, 'Web Programming', 'active'),
+(2, 'Software Engineering', 'active'),
+(3, 'Machine Learning', 'active'),
+(4, 'Data Science', 'deleted');
 
 -- --------------------------------------------------------
 
@@ -134,8 +148,15 @@ INSERT INTO `module` (`module_id`, `module_name`) VALUES
 CREATE TABLE `password_reset` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `expires_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `expires_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `password_reset`
+--
+
+INSERT INTO `password_reset` (`email`, `token`, `expires_at`) VALUES
+('blue@example.com', '0468b593c6613be26f26a8133cc5a907d01430c0618041c577745bf2a722f6de', '2025-11-30 03:23:00');
 
 -- --------------------------------------------------------
 
@@ -166,12 +187,12 @@ INSERT INTO `question` (`question_id`, `title`, `content`, `image`, `view_count`
 (3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.                ', 'img3.jpg', 75, 'active', '2025-08-19 07:30:00', 4, 1, '2025-11-07 11:06:36'),
 (4, 'What is Agile?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', 'img4.jpg', 45, 'active', '2025-08-31 09:00:00', 2, 2, '2025-11-01 05:24:17'),
 (5, 'Machine Learning Overfitting', 'My ML model is doing exceptionally well during training but it drops hard during test. How can I fix this?', 'img5.jpg', 112, 'active', '2025-09-04 03:20:00', 7, 3, '2025-11-01 05:24:20'),
-(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 500, 'active', '2025-09-09 02:00:00', 6, 2, '2025-11-01 05:24:23'),
+(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 500, 'active', '2025-09-09 02:00:00', 1, 2, '2025-11-21 10:02:21'),
 (7, 'How to use $_SESSION variable?', 'I set a session variable on login.php but when I go to dashboard.php it is empty. I forgot to use session_start().', 'img7.jpg', 850, 'closed', '2025-09-11 06:00:00', 8, 1, '2025-11-01 05:24:26'),
 (8, 'What is a Class Diagram?', 'How is an ERD different from a Class Diagram? They look similar.', 'img8.jpg', 25, 'active', '2025-09-30 04:30:00', 9, 2, '2025-11-01 05:24:30'),
 (9, 'What does NULL mean?', 'Is NULL the same as 0 or an empty string? My WHERE clause is not working.', 'img9.jpg', 12, 'active', '2025-10-14 08:00:00', 10, 4, '2025-11-01 05:24:34'),
 (10, 'How to hack wifi?', 'Just asking for a friend for a class project.', 'img10.jpg', 2, 'removed_by_admin', '2025-10-20 03:00:00', 4, 1, '2025-10-31 07:08:50'),
-(13, 'Which language?', 'Should I study R or Python for DS?', 'img11.jpg', 10, 'active', '2025-10-30 09:01:53', 8, 4, '2025-11-01 05:24:58');
+(13, 'Which language?', 'Should I study R or Python for DS?', 'img_692a287d92d068.27859000.jpg', 10, 'active', '2025-10-30 09:01:53', 8, 4, '2025-11-28 22:55:57');
 
 -- --------------------------------------------------------
 
@@ -245,27 +266,17 @@ CREATE TABLE `user_account` (
 --
 
 INSERT INTO `user_account` (`user_id`, `username`, `email`, `password`, `status`, `created_at`) VALUES
-(1, 'admin_user', 'admin@example.com', '$2y$10$abc...', 'active', '2025-08-01 03:00:00'),
-(2, 'alexj', 'alexj@example.com', '$2y$10$def...', 'active', '2025-08-10 04:30:00'),
-(3, 'blue_ocean', 'blue@example.com', '$2y$10$ghi...', 'active', '2025-08-11 07:15:00'),
+(1, 'admin', 'admin@example.com', '$2y$10$FqgllyNNHWkJzB1BVrFl8utIo30rjEG8gZrg1r5ww8djLoTwmrMP6', 'active', '2025-08-01 03:00:00'),
+(2, 'vinhle', 'alexj@example.com', '$2y$10$RJ87mch5eqY7RUZv4YriTe.3OS77s2.paHA46bbj1pUz9sBmmsRky', 'active', '2025-08-10 04:30:00'),
+(3, 'blue_ocean', 'blue@example.com', '$2y$10$yWQMOq9PT1GxttoxO7bnWutDqV56hREC2I4LGPZ1vUWKjRrWnYSHy', 'active', '2025-08-11 07:15:00'),
 (4, 'coding_finch', 'finch@example.com', '$2y$10$jkl...', 'active', '2025-08-12 02:05:00'),
 (5, 'dev_dave', 'dave@example.com', '$2y$10$mno...', 'active', '2025-08-13 09:20:00'),
-(6, 'ella_b', 'ella@example.com', '$2y$10$pqr...', 'active', '2025-08-14 04:10:00'),
+(6, 'ella_b', 'ella@example.com', '$2y$10$pqr...', 'deleted', '2025-08-14 04:10:00'),
 (7, 'green_leaf', 'green@example.com', '$2y$10$stu...', 'active', '2025-08-15 03:00:00'),
 (8, 'sky_rider', 'sky@example.com', '$2y$10$vwx...', 'active', '2025-08-16 06:45:00'),
 (9, 'sunny_daze', 'sunny@example.com', '$2y$10$yza...', 'active', '2025-08-17 08:00:00'),
-(10, 'pixel_pro', 'pixel@example.com', '$2y$10$bcd...', 'active', '2025-08-18 10:30:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_module`
---
-
-CREATE TABLE `user_module` (
-  `user_id` int(11) NOT NULL,
-  `module_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(10, 'pixel_pro', 'pixel@example.com', '$2y$10$bcd...', 'active', '2025-08-18 10:30:00'),
+(12, 'test1255', 'test1255@example.com', '$2y$10$Fe7Tc9IoaJpoZEJ817fu1ONllLix3R82rKFyCnVtyOyQGc2dp6ZBy', 'active', '2025-11-29 18:18:23');
 
 -- --------------------------------------------------------
 
@@ -292,7 +303,8 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (7, 1),
 (8, 1),
 (9, 1),
-(10, 1);
+(10, 1),
+(12, 1);
 
 --
 -- Indexes for dumped tables
@@ -378,13 +390,6 @@ ALTER TABLE `user_account`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `user_module`
---
-ALTER TABLE `user_module`
-  ADD PRIMARY KEY (`user_id`,`module_id`),
-  ADD KEY `module_id` (`module_id`);
-
---
 -- Indexes for table `user_role`
 --
 ALTER TABLE `user_role`
@@ -399,19 +404,19 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `module`
 --
 ALTER TABLE `module`
-  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `question`
@@ -435,7 +440,7 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -487,13 +492,6 @@ ALTER TABLE `question_like`
 ALTER TABLE `question_tag`
   ADD CONSTRAINT `question_tag_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `question_tag_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `user_module`
---
-ALTER TABLE `user_module`
-  ADD CONSTRAINT `user_module_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `user_module_ibfk_2` FOREIGN KEY (`module_id`) REFERENCES `module` (`module_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_role`

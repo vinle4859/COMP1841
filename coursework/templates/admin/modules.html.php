@@ -12,6 +12,7 @@
     <?php endif; ?>
     
     <form action="addmodule.php" method="post" class="inline-add-form">
+        <?= csrfField() ?>
         <label for="module_name">Add New Module</label>
         <div class="inline-add-row">
             <input type="text" id="module_name" name="module_name" placeholder="Enter module name" required maxlength="255">
@@ -19,6 +20,11 @@
         </div>
     </form>
     
+    <?php if (empty($modules)): ?>
+        <div class="empty-state-box">
+            <p>Add a module.</p>
+        </div>
+    <?php else: ?>
     <table>
         <thead>
             <tr>
@@ -49,12 +55,14 @@
                 <td class="actions">
                     <?php if (($module['status'] ?? 'active') === 'deleted'): ?>
                         <form action="restoremodule.php" method="post" style="display:inline;">
+                            <?= csrfField() ?>
                             <input type="hidden" name="module_id" value="<?= (int)$module['module_id'] ?>">
                             <input type="submit" value="Restore" class="btn-restore">
                         </form>
                     <?php else: ?>
                         <a href="editmodule.php?id=<?= (int)$module['module_id'] ?>" class="btn-link">Edit</a>
                         <form action="deletemodule.php" method="post" class="confirm-delete">
+                            <?= csrfField() ?>
                             <input type="hidden" name="module_id" value="<?= (int)$module['module_id'] ?>">
                             <input type="submit" value="Archive">
                         </form>
@@ -64,4 +72,5 @@
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php endif; ?>
 </div>

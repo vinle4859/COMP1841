@@ -1,0 +1,29 @@
+<p><a href="questiondetail.php?id=<?= $question['question_id'] ?>" class="btn-secondary">&larr; Back to Question</a></p>
+
+<h3>Editing answer for: <?= htmlspecialchars($question['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+
+<?php if (!empty($error)): ?>
+    <div class="errors"><?=htmlspecialchars($error, ENT_QUOTES, 'UTF-8')?></div>
+<?php endif; ?>
+
+<form action="editanswer.php?id=<?= $answer['answer_id'] ?>" method="post" enctype="multipart/form-data">
+    <?= csrfField() ?>
+    <label for="content">Your Answer:</label>
+    <textarea id="content" name="content" rows="5" cols="60" required><?=htmlspecialchars($content ?? '', ENT_QUOTES, 'UTF-8')?></textarea>
+    
+    <?php if (!empty($answer['image'])): ?>
+    <div class="current-image">
+        <label>Current Image:</label>
+        <img src="images/<?=htmlspecialchars($answer['image'], ENT_QUOTES, 'UTF-8')?>" alt="Current answer image" style="max-height: 150px; display: block; margin: 0.5rem 0;">
+    </div>
+    <?php endif; ?>
+    
+    <label for="image">Replace Image (optional)</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    <small style="display: block; margin-top: 0.25rem; color: #666;">Allowed: JPG, PNG, GIF. Max 2MB. Leave empty to keep current image.</small>
+
+    <div class="form-actions">
+        <input type="submit" value="Save Changes" class="btn-primary">
+        <a href="questiondetail.php?id=<?= $question['question_id'] ?>" class="btn-secondary">Cancel</a>
+    </div>
+</form>

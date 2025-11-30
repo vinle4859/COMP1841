@@ -52,3 +52,10 @@ function deleteMessage($pdo, $message_id) {
     $sql = 'DELETE FROM message WHERE message_id = :id';
     query($pdo, $sql, [':id' => $message_id]);
 }
+
+function getUnreadMessageCount($pdo) {
+    $sql = "SELECT COUNT(*) FROM message WHERE status = 'new'";
+    $query = query($pdo, $sql, []);
+    $row = $query->fetch();
+    return (int)$row[0];
+}

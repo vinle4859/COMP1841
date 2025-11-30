@@ -7,6 +7,7 @@
 
 <?php if ($module): ?>
     <form method="post" class="needs-validation">
+        <?= csrfField() ?>
         <input type="hidden" name="module_id" value="<?=htmlspecialchars($module['module_id'], ENT_QUOTES, 'UTF-8')?>">
         <p>
             <label for="module_name">Module name</label>
