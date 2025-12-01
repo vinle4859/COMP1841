@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Edit Question
+ * Modify any question's title, content, image, module, or author.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

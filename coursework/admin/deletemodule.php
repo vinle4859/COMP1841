@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Archive Module (POST handler)
+ * Soft-deletes module. Questions remain but show "[Archived]".
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

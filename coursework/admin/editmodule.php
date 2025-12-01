@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Edit Module
+ * Update course module name.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

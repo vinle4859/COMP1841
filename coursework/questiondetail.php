@@ -1,4 +1,8 @@
 <?php
+/**
+ * Question Detail Page
+ * Displays question with answers, tracks view count (once per session).
+ */
 include 'includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(); // Track last_page for redirect after login

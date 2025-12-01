@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Questions List
+ * Display and filter all questions with search by title/content or @author.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);
@@ -10,8 +14,19 @@ include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
 try {
     // Get filter parameters
     $moduleFilter = isset($_GET['module']) && $_GET['module'] !== '' ? intval($_GET['module']) : null;
-    $authorSearch = isset($_GET['author']) ? trim($_GET['author']) : null;
-    $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : null;
+    $rawSearch = isset($_GET['search']) ? trim($_GET['search']) : null;
+    
+    // Parse search: @username searches author, otherwise searches title/content
+    $searchTerm = null;
+    $authorSearch = null;
+    
+    if ($rawSearch) {
+        if (str_starts_with($rawSearch, '@')) {
+            $authorSearch = substr($rawSearch, 1);
+        } else {
+            $searchTerm = $rawSearch;
+        }
+    }
     
     // Minimum 2 characters for search (silently ignore short searches)
     if ($searchTerm && strlen($searchTerm) < 2) {

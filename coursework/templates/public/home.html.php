@@ -1,7 +1,7 @@
 <?php if (isLoggedIn()): ?>
 <!-- Logged-in user view -->
 <div class="home-hero">
-    <h2>Welcome back, <?= htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8') ?>!</h2>
+    <h2>Good day to you, <?= htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8') ?>!</h2>
     <p class="tagline">Ready to learn and share knowledge?</p>
     <div class="home-actions">
         <a href="questions.php" class="btn-primary">Browse Questions</a>

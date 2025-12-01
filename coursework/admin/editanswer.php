@@ -1,5 +1,8 @@
 <?php
-// Admin: Edit an existing answer
+/**
+ * Admin - Edit Answer
+ * Modify any answer's content or image.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

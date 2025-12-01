@@ -1,10 +1,14 @@
 <?php
-// Handler for adding answers from admin question detail page
+/**
+ * Admin - Add Answer (POST handler)
+ * Add answer on behalf of any user from admin question detail.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);
 
 include INCLUDES_PATH . 'DatabaseConnection.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
 

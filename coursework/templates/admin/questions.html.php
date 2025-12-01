@@ -13,8 +13,8 @@
         <!-- Search and Filters -->
         <form method="get" class="filter-form admin-filters-horizontal">
             <div class="filter-row">
-                <input type="text" name="search" id="search" placeholder="Search questions..." 
-                       value="<?= htmlspecialchars($searchTerm ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                <input type="text" name="search" id="search" placeholder="Search by title, content, or @author" 
+                       value="<?= htmlspecialchars($rawSearch ?? '', ENT_QUOTES, 'UTF-8') ?>" style="min-width: 280px;">
                 <select name="module" id="module">
                     <option value="">All Modules</option>
                     <?php foreach ($modules as $module): ?>
@@ -23,10 +23,8 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <input type="text" name="author" id="author" placeholder="Search by username..." 
-                       value="<?= htmlspecialchars($authorSearch ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" class="admin-action">Search</button>
-                <?php if ($moduleFilter || $authorSearch || $searchTerm): ?>
+                <?php if ($moduleFilter || $rawSearch): ?>
                     <a href="questions.php" class="btn-link">Clear</a>
                 <?php endif; ?>
             </div>

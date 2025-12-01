@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Add User
+ * Create new user accounts (students or admins).
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

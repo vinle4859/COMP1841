@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Message Detail
+ * View full message, mark read/unread, delete.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

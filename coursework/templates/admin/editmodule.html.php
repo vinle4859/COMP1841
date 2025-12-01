@@ -10,8 +10,8 @@
         <?= csrfField() ?>
         <input type="hidden" name="module_id" value="<?=htmlspecialchars($module['module_id'], ENT_QUOTES, 'UTF-8')?>">
         <p>
-            <label for="module_name">Module name</label>
-            <input id="module_name" name="module_name" value="<?=htmlspecialchars($module['module_name'], ENT_QUOTES, 'UTF-8')?>">
+            <label for="module_name">Module name<span class="required">*</span></label>
+            <input id="module_name" name="module_name" required value="<?=htmlspecialchars($module['module_name'], ENT_QUOTES, 'UTF-8')?>">
         </p>
         <p>
             <input type="submit" value="Save">

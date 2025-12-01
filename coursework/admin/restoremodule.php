@@ -1,5 +1,8 @@
 <?php
-// Restore a soft-deleted module
+/**
+ * Admin - Restore Module (POST handler)
+ * Reactivates an archived course module.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

@@ -10,12 +10,12 @@
         <?= csrfField() ?>
         <input type="hidden" name="user_id" value="<?=htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8')?>">
         <p>
-            <label for="username">Username</label>
-            <input id="username" name="username" value="<?=htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8')?>">
+            <label for="username">Username<span class="required">*</span></label>
+            <input id="username" name="username" required value="<?=htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8')?>">
         </p>
         <p>
-            <label for="email">Email</label>
-            <input id="email" name="email" value="<?=htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8')?>">
+            <label for="email">Email<span class="required">*</span></label>
+            <input id="email" name="email" required value="<?=htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8')?>">
         </p>
         <p>
             <input type="submit" value="Save">

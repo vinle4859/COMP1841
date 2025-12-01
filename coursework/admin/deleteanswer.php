@@ -1,5 +1,8 @@
 <?php
-// Admin: Delete an answer
+/**
+ * Admin - Delete Answer (POST handler)
+ * Permanently removes an answer from a question.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

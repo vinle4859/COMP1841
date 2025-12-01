@@ -46,8 +46,11 @@
         </p>
         <p>
             <label for="image">Attach Image (optional):</label>
-            <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/gif">
-            <small>Max 2MB. Allowed: JPG, PNG, GIF</small>
+            <input type="file" name="image" id="image" accept="image/*">
+            <small style="color: #666;">Only image files (JPG, PNG, GIF) under 2MB are accepted</small>
+        </p>
+        <p class="disclaimer" style="background: #fff3cd; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.85rem;">
+            <strong>Reminder:</strong> Do not post assessment solutions or offer services that would constitute academic misconduct.
         </p>
         <p>
             <input type="submit" value="Submit Answer">

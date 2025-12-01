@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Question Detail
+ * View question with all answers, add answers, delete question/answers.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

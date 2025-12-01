@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Delete Message (POST handler)
+ * Permanently removes a contact form submission.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

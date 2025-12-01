@@ -13,7 +13,7 @@
     
     <form action="addmodule.php" method="post" class="inline-add-form">
         <?= csrfField() ?>
-        <label for="module_name">Add New Module</label>
+        <label for="module_name">Add New Module<span class="required">*</span></label>
         <div class="inline-add-row">
             <input type="text" id="module_name" name="module_name" placeholder="Enter module name" required maxlength="255">
             <input type="submit" value="+ Add" class="admin-action">

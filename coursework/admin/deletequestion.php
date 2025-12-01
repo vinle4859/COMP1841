@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Delete Question (POST handler)
+ * Permanently removes question and all its answers (cascades).
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

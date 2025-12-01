@@ -6,6 +6,7 @@
 include 'includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 include INCLUDES_PATH . 'DatabaseConnection.php';
+include INCLUDES_PATH . 'InputHelpers.php';
 include FUNCTIONS_PATH . 'DatabaseFunctions.php';
 include FUNCTIONS_PATH . 'AnswerDbFunctions.php';
 

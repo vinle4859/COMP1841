@@ -19,8 +19,7 @@
 **Status: COMPLETE**
 - Add question (logged-in users only)
 - Edit own questions (title, content, image only - module locked)
-- Delete: Removed for users (business decision - preserves answers)
-- Admin can delete via admin panel
+- Delete: Full deletion (cascades to answers; admin only via admin panel)
 
 ### ✅ Display image/screenshot for posts (3 marks)
 **Status: COMPLETE**

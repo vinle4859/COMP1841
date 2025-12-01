@@ -32,13 +32,13 @@
                 <input type="hidden" name="action" value="update_profile">
                 
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username<span class="required">*</span></label>
                     <input type="text" id="username" name="username" required minlength="3" maxlength="50"
                            value="<?= htmlspecialchars($profile['username'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email Address</label>
+                    <label for="email">Email Address<span class="required">*</span></label>
                     <input type="email" id="email" name="email" required
                            value="<?= htmlspecialchars($profile['email'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
@@ -57,18 +57,18 @@
                 <input type="hidden" name="action" value="change_password">
                 
                 <div class="form-group">
-                    <label for="current_password">Current Password</label>
+                    <label for="current_password">Current Password<span class="required">*</span></label>
                     <input type="password" id="current_password" name="current_password" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="new_password">New Password</label>
+                    <label for="new_password">New Password<span class="required">*</span></label>
                     <input type="password" id="new_password" name="new_password" required minlength="6">
                     <small>Minimum 6 characters</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="confirm_password">Confirm New Password</label>
+                    <label for="confirm_password">Confirm New Password<span class="required">*</span></label>
                     <input type="password" id="confirm_password" name="confirm_password" required>
                 </div>
                 
@@ -119,7 +119,7 @@
     <!-- Account Deletion (not available for admins) -->
     <div class="profile-section danger-zone">
         <h3>Delete Account</h3>
-        <p>Account deletion has a 30-day grace period. During this time, you can contact us to reinstate your account. After the grace period, your data will be permanently removed.</p>
+        <p>Account deletion has a 30-day grace period. During this time, you can contact us to restore your account. After the grace period or at your request, your personal data will be permanently removed.</p>
         
         <details class="delete-account-details">
             <summary>Delete my account</summary>

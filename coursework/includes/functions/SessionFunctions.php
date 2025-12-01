@@ -38,30 +38,6 @@ function getCurrentUserId() {
 }
 
 /**
- * Get current logged-in username
- */
-function getCurrentUsername() {
-    initSession();
-    return $_SESSION['username'] ?? null;
-}
-
-/**
- * Get current user data from session
- */
-function getCurrentUser() {
-    initSession();
-    if (!isLoggedIn()) {
-        return null;
-    }
-    return [
-        'user_id' => $_SESSION['user_id'],
-        'username' => $_SESSION['username'],
-        'email' => $_SESSION['email'],
-        'is_admin' => $_SESSION['is_admin'] ?? false
-    ];
-}
-
-/**
  * Log in a user - set session variables
  */
 function loginUser($user, $isAdmin = false) {

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Edit User
+ * Update username, email, password, or role for any user.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

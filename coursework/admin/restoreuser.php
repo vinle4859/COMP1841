@@ -1,5 +1,8 @@
 <?php
-// Restore a soft-deleted user
+/**
+ * Admin - Restore User (POST handler)
+ * Reactivates a soft-deleted user account.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

@@ -7,13 +7,15 @@
 
 <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     <?= csrfField() ?>
-    <label for="title">Write Your Title:</label>
+    <p class="required-note"><span class="required">*</span> Required fields</p>
+    
+    <label for="title">Title <span class="required">*</span></label>
     <input type="text" id="title" name="title" required maxlength="255" value="<?=htmlspecialchars($titleInput ?? '', ENT_QUOTES, 'UTF-8')?>">
 
-    <label for="content">Write Your question:</label>
+    <label for="content">Question <span class="required">*</span></label>
     <textarea id="content" name="content" rows="5" cols="60" required><?=htmlspecialchars($content ?? '', ENT_QUOTES, 'UTF-8')?></textarea>
     
-    <label for="module">Module</label>
+    <label for="module">Module <span class="required">*</span></label>
     <select id="module" name="module" required>
         <option value="">Select a module</option>
         <?php foreach($modules as $m): ?>
@@ -29,6 +31,10 @@
     <label for="image">Image (optional)</label>
     <input type="file" id="image" name="image" accept="image/*">
     <small style="display: block; margin-top: 0.25rem; color: #666;">Allowed: JPG, PNG, GIF. Max size: 2MB</small>
+
+    <p class="disclaimer" style="background: #fff3cd; padding: 0.75rem; border-radius: 4px; margin: 1rem 0; font-size: 0.9rem;">
+        <strong>Reminder:</strong> Do not request assessment solutions or services that would constitute academic misconduct.
+    </p>
 
     <div class="form-actions">
         <input type="submit" name="submit" value="Add" class="btn-primary">

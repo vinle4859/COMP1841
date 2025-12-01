@@ -29,7 +29,7 @@
                 }
                 ?>
                 <ul>
-                    <li><a href="questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Question List</a></li>
+                    <li><a href="questions.php" <?= (isset($activePage) && $activePage === 'questions') ? 'class="active"' : '' ?>>Questions</a></li>
                     <li><a href="messages.php" <?= (isset($activePage) && $activePage === 'messages') ? 'class="active"' : '' ?>>Inbox<?php if ($unreadCount > 0): ?> (<?= $unreadCount ?> Unread)<?php endif; ?></a></li>
                     <li><a href="users.php" <?= (isset($activePage) && $activePage === 'users') ? 'class="active"' : '' ?>>Users</a></li>
                     <li><a href="modules.php" <?= (isset($activePage) && $activePage === 'modules') ? 'class="active"' : '' ?>>Modules</a></li>
@@ -49,7 +49,8 @@
         </div>
 
         <footer>
-            &copy; 2025 UOG Student Forum. All rights reserved.
+            <div>&copy; 2025 UOG Student Forum. All rights reserved.</div>
+            <div><a href="<?= BASE_URL ?>/terms.php" style="color: #ccc;">Terms of Service</a></div>
         </footer>
 
         <script>
@@ -70,6 +71,31 @@
                         e.preventDefault();
                         e.stopPropagation();
                         alert('Please complete the required fields before submitting the form.');
+                    }
+                });
+            });
+
+            // Image upload validation - applies to ALL file inputs with type="file" and accept="image/*"
+            document.querySelectorAll('input[type="file"][accept*="image"]').forEach(function(fileInput){
+                fileInput.closest('form')?.addEventListener('submit', function(e){
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                        const maxSize = 2 * 1024 * 1024; // 2MB
+                        
+                        if (!allowedTypes.includes(file.type)) {
+                            e.preventDefault();
+                            alert('Please select a valid image file (JPG, PNG, or GIF).');
+                            fileInput.value = '';
+                            return false;
+                        }
+                        
+                        if (file.size > maxSize) {
+                            e.preventDefault();
+                            alert('File is too large. Maximum size is 2MB.');
+                            fileInput.value = '';
+                            return false;
+                        }
                     }
                 });
             });

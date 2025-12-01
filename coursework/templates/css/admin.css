@@ -508,6 +508,18 @@ label {
     font-size: 0.9375rem;
 }
 
+/* Required field indicator */
+.required {
+    color: var(--admin-danger);
+    margin-left: 2px;
+}
+
+.required-note {
+    font-size: 0.875rem;
+    color: var(--admin-text-light);
+    margin-bottom: 1rem;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],

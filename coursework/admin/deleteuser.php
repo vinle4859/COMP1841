@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Soft Delete User (POST handler)
+ * Marks user as deleted but preserves their content.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

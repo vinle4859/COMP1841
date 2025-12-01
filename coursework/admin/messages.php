@@ -1,5 +1,8 @@
 <?php
-// Admin inbox
+/**
+ * Admin - Inbox
+ * View contact form submissions, mark as read/unread, delete messages.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

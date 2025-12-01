@@ -1,5 +1,8 @@
 <?php
-// Admin modules list - display only, form posts to addmodule.php
+/**
+ * Admin - Modules List
+ * Display, add, soft-delete, and restore course modules.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

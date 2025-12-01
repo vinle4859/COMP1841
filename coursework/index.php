@@ -1,4 +1,8 @@
 <?php
+/**
+ * Home Page
+ * Landing page showing recent questions for all visitors.
+ */
 include 'includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(); // Track last_page for redirect after login

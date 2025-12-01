@@ -10,7 +10,7 @@
     <form method="get" class="filter-form admin-filters-horizontal" style="margin-bottom: 1rem;">
         <div class="filter-row">
             <input type="text" name="search" placeholder="Search by username or email..." 
-                   value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                   value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>" style="min-width: 240px;">
             <button type="submit" class="admin-action">Search</button>
             <?php if (!empty($_GET['search'])): ?>
                 <a href="users.php" class="btn-link">Clear</a>

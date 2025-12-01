@@ -1,5 +1,8 @@
 <?php
-// Admin users list
+/**
+ * Admin - Users List
+ * Display all users with search, soft-delete, and restore functionality.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

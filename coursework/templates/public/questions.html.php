@@ -9,13 +9,8 @@
         <form method="get" class="filter-form">
             <div class="filter-row">
                 <div class="search-box">
-                    <input type="text" name="search" placeholder="Search questions..." 
-                           value="<?= htmlspecialchars($searchTerm ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                </div>
-                <div class="filter-group">
-                    <label for="author">Author:</label>
-                    <input type="text" name="author" id="author" placeholder="Search by username..." 
-                           value="<?= htmlspecialchars($authorSearch ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="search" placeholder="Search by title, content, or @author" 
+                           value="<?= htmlspecialchars($rawSearch ?? '', ENT_QUOTES, 'UTF-8') ?>" style="min-width: 280px;">
                 </div>
                 <div class="filter-group">
                     <label for="module">Module:</label>
@@ -32,9 +27,9 @@
             <div class="filter-actions">
                 <button type="submit">Search</button>
                 <?php if (isLoggedIn()): ?>
-                    <a href="questions.php?author=mine" class="btn-mine <?= ($authorSearch === 'mine' || (isset($userFilter) && $userFilter == $_SESSION['user_id'])) ? 'active' : '' ?>">My Questions</a>
+                    <a href="questions.php?search=@mine" class="btn-mine <?= (isset($userFilter) && $userFilter == $_SESSION['user_id']) ? 'active' : '' ?>">My Questions</a>
                 <?php endif; ?>
-                <?php if ($searchTerm || $moduleFilter || $authorSearch): ?>
+                <?php if ($rawSearch || $moduleFilter): ?>
                     <a href="questions.php" class="btn-clear">Clear All</a>
                 <?php endif; ?>
             </div>

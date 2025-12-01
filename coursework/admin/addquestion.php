@@ -1,4 +1,8 @@
 <?php
+/**
+ * Admin - Add Question
+ * Create a new question on behalf of any user.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true]);

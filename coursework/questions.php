@@ -1,4 +1,8 @@
 <?php
+/**
+ * Questions List Page
+ * Browse all questions with module filter and search (@author or text).
+ */
 include 'includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(); // Track last_page for redirect after login
@@ -10,27 +14,35 @@ include FUNCTIONS_PATH . 'QuestionDbFunctions.php';
 try {
     // Get filter parameters
     $moduleFilter = isset($_GET['module']) && $_GET['module'] !== '' ? intval($_GET['module']) : null;
-    $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : null;
-    $authorSearch = isset($_GET['author']) ? trim($_GET['author']) : null;
+    $rawSearch = isset($_GET['search']) ? trim($_GET['search']) : null;
+    
+    // Parse search: @username searches author, otherwise searches title/content
+    $searchTerm = null;
+    $authorSearch = null;
+    
+    if ($rawSearch) {
+        if (str_starts_with($rawSearch, '@')) {
+            // @author search
+            $authorSearch = substr($rawSearch, 1);
+            if ($authorSearch === 'mine' && isLoggedIn()) {
+                $userFilter = getCurrentUserId();
+                $authorSearch = null;
+            }
+        } else {
+            $searchTerm = $rawSearch;
+        }
+    }
     
     // Minimum 2 characters for search (silently ignore short searches)
     if ($searchTerm && strlen($searchTerm) < 2) {
         $searchTerm = null;
     }
-    if ($authorSearch && $authorSearch !== 'mine' && strlen($authorSearch) < 2) {
+    if ($authorSearch && strlen($authorSearch) < 2) {
         $authorSearch = null;
     }
     
-    // Empty strings should be null (no filter)
-    if ($searchTerm === '') $searchTerm = null;
-    if ($authorSearch === '') $authorSearch = null;
-    
     // Special case: "mine" shows only current user's questions
-    $userFilter = null;
-    if ($authorSearch === 'mine' && isLoggedIn()) {
-        $userFilter = getCurrentUserId();
-        $authorSearch = null; // Clear so we don't also do LIKE search
-    }
+    $userFilter = $userFilter ?? null;
     
     // Get all active modules for the filter dropdown (public view)
     $modules = selectAll($pdo, 'module');

@@ -1,5 +1,8 @@
 <?php
-// Handler for adding modules - POST only, redirects back to modules.php
+/**
+ * Admin - Add Module (POST handler)
+ * Creates new course module, redirects to modules list.
+ */
 include '../includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['admin' => true, 'csrf' => true]);

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Contact Form Page
+ * Submit messages to site admin. Pre-fills name/email for logged-in users.
+ */
 include 'includes/config.php';
 include FUNCTIONS_PATH . 'SessionFunctions.php';
 initRequest(['csrf' => false]); // Manual CSRF for friendly error
