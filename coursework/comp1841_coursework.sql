@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2025 at 04:12 AM
+-- Generation Time: Dec 01, 2025 at 09:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -62,7 +62,6 @@ INSERT INTO `answer` (`answer_id`, `content`, `is_accepted`, `image`, `status`, 
 (17, 'Understood.', 0, NULL, 'active', '2025-09-09 21:00:00', 5, 6),
 (18, 'What if it\'s for a group project?', 1, NULL, 'active', '2025-09-09 22:00:00', 9, 6),
 (19, 'You have to call `session_start();` at the *very* top of *every* script (like `dashboard.php`) where you want to access or modify the `$_SESSION` array. Before any HTML or `echo` statements.', 1, NULL, 'active', '2025-09-11 23:10:00', 4, 7),
-(20, 'Yep, as you said in your post, you forgot `session_start()`. That function tells PHP to either resume the existing session or start a new one, allowing it to populate the `$_SESSION` superglobal.', 0, NULL, 'active', '2025-09-11 23:15:00', 2, 7),
 (21, 'An **ERD (Entity-Relationship Diagram)** models the *database structure*. It shows tables, columns, and relationships (one-to-one, one-to-many). A **Class Diagram** models the *software (code) structure*. It shows classes, their attributes (variables), their methods (functions), and how classes relate to each other (inheritance, association).', 0, NULL, 'active', '2025-09-30 22:00:00', 3, 8),
 (22, 'They look similar but serve different purposes. ERD is for data-centric design (the database). Class Diagram is for object-oriented design (the application logic).', 0, NULL, 'active', '2025-09-30 23:30:00', 6, 8),
 (23, 'A simple way to think about it: An ERD becomes your SQL `CREATE TABLE` statements. A Class Diagram becomes your `class User { ... }` definitions in PHP, Python, or Java.', 0, NULL, 'active', '2025-10-02 02:00:00', 1, 8),
@@ -75,7 +74,8 @@ INSERT INTO `answer` (`answer_id`, `content`, `is_accepted`, `image`, `status`, 
 (30, 'R is fantastic for pure statistical analysis and visualization. It was built by statisticians *for* statisticians. Its libraries (like `ggplot2` and the `tidyverse`) are incredibly powerful for data exploration and academic research.', 0, NULL, 'active', '2025-10-31 03:05:00', 6, 13),
 (31, 'Honestly, you can\'t go wrong. Python is more versatile (general-purpose), R is more specialized (statistics). Many data scientists know both. I\'d start with Python as it\'s easier to branch out from there.', 0, NULL, 'active', '2025-10-31 04:00:00', 3, 13),
 (32, 'Python has a gentler learning curve for people new to programming. R\'s syntax can be a bit quirky at first, but it\'s very powerful once you get it.', 0, NULL, 'active', '2025-11-01 02:00:00', 9, 13),
-(33, 'I don\'t think this is an appropriate question on this forum.', 0, NULL, 'active', '2025-11-29 18:33:09', 2, 10);
+(33, 'I don\'t think this is an appropriate question on this forum.', 0, NULL, 'active', '2025-11-29 18:33:09', 2, 10),
+(35, 'It is also better check for session before starting!', 0, 'answer_1764611301_692dd4e5dc8a4.jpg', 'active', '2025-12-01 17:48:21', 2, 7);
 
 -- --------------------------------------------------------
 
@@ -102,10 +102,10 @@ INSERT INTO `message` (`message_id`, `user_id`, `subject`, `content`, `status`, 
 (1, NULL, 'Suggestion', 'This website sucks. Pls fix!', 'new', '2025-11-14 06:45:20', 'vinh', 'vinh213@gmail.com'),
 (2, NULL, 'Improvement', 'Can we have a login feature?', 'new', '2025-11-14 08:11:36', 'levinh', 'levinh392@gmail.com'),
 (4, NULL, 'test1', 'just testing1', 'resolved', '2025-11-14 08:40:06', 'tester1', 'tester1@gmail.com'),
-(8, NULL, 'fjsdif', 'fdsifdwwe', 'new', '2025-11-14 09:09:24', 'ddasd', 'dsada@gmail.com'),
 (9, NULL, 'fjsdif', 'fdsifdwwe', 'read', '2025-11-14 09:09:30', 'ddasd', 'dsada@gmail.com'),
 (10, NULL, 'test111', 'test111', 'read', '2025-11-30 01:28:08', 'test111', 'test111@example.com'),
-(11, 2, 'Module', 'Can we get Data Science module back pls?', 'new', '2025-11-30 02:32:14', 'vinhle', 'alexj@example.com');
+(11, 2, 'Module', 'Can we get Data Science module back pls?', 'read', '2025-11-30 02:32:14', 'vinhle', 'alexj@example.com'),
+(12, NULL, 'guest message', 'afghj', 'read', '2025-12-01 17:32:49', 'test635', 'test635@example.com');
 
 -- --------------------------------------------------------
 
@@ -128,7 +128,8 @@ INSERT INTO `module` (`module_id`, `module_name`, `status`) VALUES
 (2, 'Software Engineering', 'active'),
 (3, 'Machine Learning', 'active'),
 (4, 'Data Science', 'deleted'),
-(11, 'Professional Project Management', 'active');
+(11, 'Professional Project Management', 'active'),
+(12, 'abc', 'deleted');
 
 -- --------------------------------------------------------
 
@@ -147,7 +148,8 @@ CREATE TABLE `password_reset` (
 --
 
 INSERT INTO `password_reset` (`email`, `token`, `expires_at`) VALUES
-('blue@example.com', '0468b593c6613be26f26a8133cc5a907d01430c0618041c577745bf2a722f6de', '2025-11-30 03:23:00');
+('blue@example.com', '0468b593c6613be26f26a8133cc5a907d01430c0618041c577745bf2a722f6de', '2025-11-30 03:23:00'),
+('test425@example.com', '006ef3f8df37199f9ce5b25a5bbeec35e5a035152eee40f3b34d9aa091addaac', '2025-12-02 00:46:27');
 
 -- --------------------------------------------------------
 
@@ -176,15 +178,15 @@ INSERT INTO `question` (`question_id`, `title`, `content`, `image`, `view_count`
 (1, 'How do I center a div?', 'I have tried margin: auto but it\'s not working. What is the modern way using flexbox?', 'img1.jpg', 150, 'active', '2025-08-04 02:15:00', 2, 1, '2025-11-07 07:24:07'),
 (2, 'What is a foreign key?', 'I don\'t understand the difference between a primary key and a foreign key. Can someone explain?', 'img2.jpg', 302, 'closed', '2025-08-09 04:00:00', 3, 4, '2025-11-01 05:24:08'),
 (3, 'PHP PDO connection error', 'I\'m getting \"SQLSTATE[HY000] [2002] No such file or directory\". I am using XAMPP on a Mac. My code is attached.                ', 'img3.jpg', 75, 'active', '2025-08-19 07:30:00', 4, 1, '2025-11-07 11:06:36'),
-(4, 'What is Agile?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', 'question_1764469530_692bab1a627bd.jpg', 47, 'active', '2025-08-31 09:00:00', 2, 2, '2025-11-30 02:25:30'),
+(4, 'What is Agile test?', 'The lecturer mentioned \"Agile\" and \"Sprints\". How is this different from the Waterfall model?', 'question_1764469530_692bab1a627bd.jpg', 48, 'active', '2025-08-31 09:00:00', 2, 2, '2025-12-01 17:55:16'),
 (5, 'Machine Learning Overfitting', 'My ML model is doing exceptionally well during training but it drops hard during test. How can I fix this?', 'img5.jpg', 112, 'active', '2025-09-04 03:20:00', 7, 3, '2025-11-01 05:24:20'),
-(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 503, 'active', '2025-09-09 02:00:00', 1, 2, '2025-11-30 02:03:23'),
-(7, 'How to use $_SESSION variable?', 'I set a session variable on login.php but when I go to dashboard.php it is empty. I forgot to use session_start().', 'img7.jpg', 851, 'closed', '2025-09-11 06:00:00', 8, 1, '2025-11-30 00:35:20'),
-(8, 'What is a Class Diagram?', 'How is an ERD different from a Class Diagram? They look similar.', 'img8.jpg', 25, 'active', '2025-09-30 04:30:00', 9, 2, '2025-11-01 05:24:30'),
-(9, 'What does NULL mean?', 'Is NULL the same as 0 or an empty string? My WHERE clause is not working.', 'img9.jpg', 12, 'active', '2025-10-14 08:00:00', 10, 4, '2025-11-01 05:24:34'),
-(10, 'How to hack wifi?', 'Just asking for a friend for a class project.', 'img10.jpg', 3, 'removed_by_admin', '2025-10-20 03:00:00', 4, 1, '2025-11-29 23:08:59'),
-(13, 'Which language?', 'Should I study R or Python for DS?', 'img_692a287d92d068.27859000.jpg', 21, 'active', '2025-10-30 09:01:53', 8, 4, '2025-11-30 01:27:26'),
-(16, 'Notice: New Module', 'There is a new module called \"Professional Project Management\". Have fun everyone!', NULL, 1, 'active', '2025-11-30 01:50:50', 1, 11, '2025-11-30 02:00:47');
+(6, 'Reminder: Do not share passwords', 'This is a reminder that sharing passwords is a violation of university policy.', 'img6.jpg', 505, 'active', '2025-09-09 02:00:00', 1, 2, '2025-11-30 05:57:48'),
+(7, 'How to use $_SESSION variable?', 'I set a session variable on login.php but when I go to dashboard.php it is empty. I forgot to use session_start().', 'img7.jpg', 853, 'closed', '2025-09-11 06:00:00', 8, 1, '2025-12-01 20:06:34'),
+(8, 'What is a Class Diagram?', 'How is an ERD different from a Class Diagram? They look similar.', 'img8.jpg', 28, 'active', '2025-09-30 04:30:00', 9, 2, '2025-12-01 16:39:23'),
+(9, 'What does NULL mean?', 'Is NULL the same as 0 or an empty string? My WHERE clause is not working.', 'img9.jpg', 13, 'active', '2025-10-14 08:00:00', 10, 4, '2025-11-30 05:50:56'),
+(10, 'How to hack wifi?', 'Just asking for a friend for a class project.', 'img10.jpg', 4, 'removed_by_admin', '2025-10-20 03:00:00', 4, 1, '2025-12-01 17:37:06'),
+(13, 'Which language?', 'Should I study R or Python for DS?', 'img_692a287d92d068.27859000.jpg', 23, 'active', '2025-10-30 09:01:53', 8, 4, '2025-11-30 22:32:01'),
+(16, 'Notice: New Module', 'There is a new module called \"Professional Project Management\". Have fun everyone!', NULL, 3, 'active', '2025-11-30 01:50:50', 1, 11, '2025-12-01 18:39:42');
 
 -- --------------------------------------------------------
 
@@ -237,7 +239,12 @@ INSERT INTO `user_account` (`user_id`, `username`, `email`, `password`, `status`
 (10, 'pixel_pro', 'pixel@example.com', '$2y$10$bcd...', 'active', '2025-08-18 10:30:00'),
 (12, 'test1255', 'test1255@example.com', '$2y$10$Fe7Tc9IoaJpoZEJ817fu1ONllLix3R82rKFyCnVtyOyQGc2dp6ZBy', 'active', '2025-11-29 18:18:23'),
 (13, 'test1359', 'test1359@example.com', '$2y$10$BzaHcXAab9TrGOm5CMVNwey8p3yIMXgH.JFfIwx2ZZPv44JjBAwwC', 'active', '2025-11-30 00:43:47'),
-(14, 'test1111', 'test1111@example.com', '$2y$10$A6pRBvEujLyilwtd/bukQOQHp2UTUTKqSUlNotwV9HQ3szb0T4Y.e', 'deleted', '2025-11-30 01:06:15');
+(14, 'test1111', 'test1111@example.com', '$2y$10$A6pRBvEujLyilwtd/bukQOQHp2UTUTKqSUlNotwV9HQ3szb0T4Y.e', 'deleted', '2025-11-30 01:06:15'),
+(15, 'test222', 'test222@example.com', '$2y$10$vCodGz40uHlXkC3ekQ2BfO65Ki8wSbnQtsRLrVu0QUUeddD4Bat7.', 'active', '2025-11-30 20:55:15'),
+(16, 'test333', 'test333@example.com', '$2y$10$2.D0rRdk5eaWaHoaLQR.qOTR8gci3NmCJvwiDb/.c41SNJo69l93e', 'active', '2025-12-01 17:27:20'),
+(17, 'test2222', 'test2222@example.com', '$2y$10$UuXaWvXno2wU2b61btOET.liWNcepd/NeIJyTc2IOlf3mz9TkWXyW', 'active', '2025-12-01 17:27:57'),
+(18, 'test425', 'test425@example.com', '$2y$10$uzfOLaMWcScNlGV6U4MTu.3.5SxW/GRdP1GZKxR7KxMdrVFjfrYPm', 'active', '2025-12-01 17:30:09'),
+(19, 'test458', 'test456@example.com', '$2y$10$aqsLe7QB8Gn1cAsk1AixWO1Eq3WY46csguGCCVd6B87quwcLBgXn2', 'deleted', '2025-12-01 18:43:23');
 
 -- --------------------------------------------------------
 
@@ -267,7 +274,11 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (10, 1),
 (12, 1),
 (13, 1),
-(14, 1);
+(14, 1),
+(15, 1),
+(16, 1),
+(17, 1),
+(18, 1);
 
 --
 -- Indexes for dumped tables
@@ -339,25 +350,25 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `module`
 --
 ALTER TABLE `module`
-  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `module_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -369,7 +380,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
